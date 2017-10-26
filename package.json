@@ -1,0 +1,15 @@
+{
+  "name": "r-demo",
+  "version": "0.0.1-beta",
+  "description": "r demo",
+  "main": "",
+  "author": "alibaba dt",
+  "scripts": {
+
+  },
+  "pre-commit": [
+    "tslint"
+  ],
+  "dependencies": {},
+  "devDependencies": {}
+}
