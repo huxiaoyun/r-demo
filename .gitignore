@@ -3,13 +3,3 @@
 .vscode
 *.log
 node_modules
-build
-lib
-es5
-es6
-npm-debug.log
-test/case/node_modules
-test/image
-docs/node_modules
-umd
-built
