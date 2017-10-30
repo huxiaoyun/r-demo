@@ -4,12 +4,28 @@
   "description": "r demo",
   "main": "",
   "author": "alibaba dt",
-  "scripts": {
-
-  },
+  "scripts": {},
   "pre-commit": [
     "tslint"
   ],
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@alife/dpl-visist": "^0.0.1",
+    "@alife/next": "^0.19.7",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "css-loader": "^0.28.4",
+    "node-sass": "^4.5.3",
+    "react": "^15.6.1",
+    "react-addons-transition-group": "^15.6.2",
+    "react-codemirror": "^1.0.0",
+    "react-dom": "^15.6.1",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "ts-loader": "^2.3.0",
+    "typescript": "^2.5.1",
+    "webpack": "^3.8.1",
+    "webpack-dev-middleware": "^1.11.0",
+    "webpack-dev-server": "^2.5.1"
+  }
 }
