@@ -5,6 +5,7 @@ import * as ReactDOM from 'react-dom';
 import { Icon } from '@alife/next';
 const CodeMirror = require('react-codemirror');
 require('codemirror/lib/codemirror.css');
+import { config } from '../../examples/line/simple';
 import "@alife/dpl-visist/index.scss";
 
 class App extends React.Component {
@@ -16,6 +17,7 @@ class App extends React.Component {
       readOnly: true,
       value: `function() { console.log("xx");}`,
     };
+    const str = `RechartCore.ChartBuilder(${JSON.stringify(config, null, 2)});`;
     return (<div>
       <div className="left-panel">
         <ul className="nav">
@@ -35,11 +37,24 @@ class App extends React.Component {
             <div className="case-split"></div>
             <div className="case-code">
               <div>
-                <Icon type="play" />
+                <a href="#"
+                  data-playground="jsfiddle"
+                  data-playground-from-group="code-example-1"
+                  data-playground-resources="//g.alicdn.com/rda/wisemap/0.2.8/rechart-core.js"
+                  data-playground-wrap="d">
+                  <Icon type="play" />
+                </a>
                 <Icon type="attachment" />
               </div>
               <div>
-                <CodeMirror options={options} />
+                <div>
+                  <pre data-playground-type="html" data-playground-group="code-example-1">
+                    {`<div id="mountNode"></div>`}
+                  </pre>
+                  <pre data-playground-type="javascript" data-playground-group="code-example-1">
+                    {str}
+                  </pre>
+                </div>
               </div>
             </div>
           </div>
