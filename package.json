@@ -4,7 +4,9 @@
   "description": "r demo",
   "main": "",
   "author": "alibaba dt",
-  "scripts": {},
+  "scripts": {
+    "start": "node ./run.js"
+  },
   "pre-commit": [
     "tslint"
   ],
@@ -15,6 +17,7 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "css-loader": "^0.28.4",
+    "jquery": "^3.2.1",
     "node-sass": "^4.5.3",
     "react": "^15.6.1",
     "react-addons-transition-group": "^15.6.2",

@@ -4,7 +4,13 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="always" name="referrer">
-    <script defer src="//jsfiddle.net/js/jsfiddle-post.js"></script>
+    <script defer src="./lib/jsfiddle-post.js"></script>
+    <script src="./lib/react-with-addons.min.js" type="text/javascript" ></script>
+    <script src="./lib/react-dom.min.js" type="text/javascript" ></script>
+    <script src="./lib/prop-types.min.js" type="text/javascript" ></script>
+    <script src="./lib/browser.js" type="text/javascript" ></script>
+    <script src="./lib/rechart-core.js" type="text/javascript" ></script>
+    <script src="./lib/rechart-react.js" type="text/javascript" ></script>
   </head>
   <body>
     <div class="header">
@@ -27,7 +33,42 @@
         </ul>
       </div>
     </div>
-    <div class="main-content" id="main-content"></div>
+    <div class="main-content" id="main-content">
+      <div class="left-panel">
+        <ul class="nav">
+          <li>线性图</li>
+          <li>柱状图</li>
+        </ul>
+      </div>
+      <div class="right-panel">
+        <div class="case-type">
+          <h3>线性图</h3>
+        </div>
+        <div class="case-list">
+          <div class="case-box">
+            <div class="case-demo">
+              <div id="example1"></div>
+            </div>
+            <div class="case-split"></div>
+            <div class="case-code">
+              <div>
+
+              </div>
+              <div class="op">
+                <a href="#"
+                  data-playground="jsfiddle"
+                  data-playground-from-group="code-example-1-1"
+                  data-playground-resources="//g.alicdn.com/rda/wisemap/0.2.8/rechart-core.js"
+                  data-playground-wrap="d">
+                  运行
+                </a>
+                <a>复制</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="./build/demo.js" type="text/javascript" ></script>
   </body>
 </html>

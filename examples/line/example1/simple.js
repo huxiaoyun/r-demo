@@ -94,8 +94,8 @@ export const config = {
   },
   chart: {
     type: 'commonChart',
-    container: 'mountNode',
-    width: 800,
+    container: 'example1',
+    width: 550,
     height: 400,
   },
 };
