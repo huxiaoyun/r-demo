@@ -70,9 +70,34 @@
 
 __webpack_require__(1);
 var $ = __webpack_require__(6);
-const code = __webpack_require__(7);
+const codeConfig = __webpack_require__(7);
 
+// const caseBoxTpl = require('./caseBox.tpl');
 class App {
+  constructor() {
+    this.attrs = {
+      codes: [],
+      language: 'json',
+    };
+  }
+  init() {
+    // 根据 url 路由转发
+    const langReg = new RegExp('(^|&)language=([^&]*)(&|$)');
+    const search = window.location.search.substr(1);
+
+    const langResult = search.match(langReg);
+    const lang = langResult ? langResult[2] : 'json';
+    this.attrs.language = lang;
+    Object.keys(codeConfig).forEach((chartType) => {
+      const exampleFolders = codeConfig[chartType];
+      exampleFolders.forEach((folder) => {
+        const code = __webpack_require__(8)(`./${chartType}/${folder}/${lang}Code.js`);
+        this.attrs.codes.push(code);
+      });
+    });
+    this.render();
+    this.bindEvent();
+  }
 
   renderNav() {
 
@@ -83,13 +108,168 @@ class App {
 
   }
 
+  bindEvent() {
+    var _this = this;
+    $('.case-box .op .run').click(function() {
+      const index = $(this).attr('data-index');
+
+      const data = _this.getJsfiddleData(index);
+      const formAttributes = {
+          method: 'post',
+          action: 'https://jsfiddle.net/api/post/library/pure/',
+          target: '_blank',
+          id: 'fiddle-form',
+          style: 'display: none;'
+      }
+
+      const node = document.createElement('textarea');
+      const form = document.createElement('form');
+      for (const attr in formAttributes) {
+          form.setAttribute(attr, formAttributes[attr]);
+      }
+
+      for (let name in data) {
+          node.name = name;
+          node.value = data[name].toString();
+          form.appendChild(node.cloneNode());
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    });
+  }
+  getJsfiddleData(index) {
+    const language = this.attrs.language;
+    switch(language) {
+      case 'json':
+        return this.getJsfiddleJsonData(index);
+      case 'react':
+        return this.getJsfiddleReactData(index);
+      case 'rax':
+        return;
+      case 'vue':
+        return;
+      case 'angular':
+        return;
+      default:
+        return;
+    }
+  }
+
+  getJsfiddleReactData(index) {
+    const code = this.attrs.codes[index];
+    const data = {
+      js: `var config = ${code.config};
+          ${code.script}
+          ReactDOM.render(${code.template},
+          document.getElementById('example'));
+        `,
+        html: `<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js"></script>
+
+        <script src="https://huxiaoyun.github.io/r-demo/lib/rechart-core.js"></script>
+        <script src="https://huxiaoyun.github.io/r-demo/lib/rechart-react.js"></script>
+
+        <div id="example"></div>`,
+        panel_css: 1,
+        panel_js: 3
+    };
+
+    return data;
+  }
+
+  getJsfiddleJsonData(index) {
+    const code = this.attrs.codes[index];
+    const config = JSON.stringify(code.config, null, 2);
+    const data = {
+      js: `var config = ${config};
+          config.chart.container = 'example';
+          RechartCore.ChartBuilder(config);
+        `,
+        html: `<script src="https://huxiaoyun.github.io/r-demo/lib/rechart-core.js"></script><div id="example"></div>`,
+        panel_css: 1,
+        panel_js: 3
+    };
+    return data;
+  }
+
   render() {
-    $('#example1').append(`<script type="text/babel">${code.code}</script>`);
+    const language = this.attrs.language;
+    switch(language) {
+      case 'json':
+        this.renderJson();
+        break;
+      case 'react':
+        this.renderReact();
+        break;
+      case 'rax':
+        break;
+      case 'vue':
+        break;
+      case 'angular':
+        break;
+      default:
+        return;
+    }
+  }
+
+  renderJson() {
+    console.log(this.attrs.codes);
+    this.attrs.codes.forEach((code, index) => {
+      const str = JSON.stringify(code.config, null, 2);
+      const tpl = `<div class="case-box">
+        <div class="case-demo">
+          <div id="example${index}"></div>
+        </div>
+        <div class="case-split"></div>
+        <div class="case-code">
+          <div class="case-code-detail">
+            ${str}
+          </div>
+          <div class="op">
+            <a class="run" data-index="${index}">运行</a>
+            <a>复制</a>
+          </div>
+        </div>
+      </div>`;
+      $('.case-list').append(tpl);
+      code.config.chart.container = `example${index}`;
+      RechartCore.ChartBuilder(code.config);
+    });
+  }
+
+  renderReact() {
+    this.attrs.codes.forEach((code, index) => {
+      const scriptCode = `
+      var config = ${code.config};
+      ${code.script}
+      ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
+      const str = JSON.stringify(scriptCode, null, 2);
+      console.log(scriptCode, str);
+      const tpl = `<div class="case-box">
+        <div class="case-demo">
+          <div id="example${index}"></div>
+        </div>
+        <div class="case-split"></div>
+        <div class="case-code">
+          <div class="case-code-detail">
+            ${str}
+          </div>
+          <div class="op">
+            <a class="run" data-index="${index}">运行</a>
+            <a>复制</a>
+          </div>
+        </div>
+      </div>`;
+      $('.case-list').append(tpl);
+      $('.case-list').append(`<script type="text/babel">${scriptCode}</script>`);
+    });
   }
 }
 
 
-new App().render();
+new App().init();
 
 
 /***/ }),
@@ -132,7 +312,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0; }\n\nbody {\n  background: #edf1f5; }\n\nul {\n  display: block;\n  list-style-type: none;\n  -webkit-margin-before: 0;\n  -webkit-margin-after: 0;\n  -webkit-margin-start: 0px;\n  -webkit-margin-end: 0px;\n  -webkit-padding-start: 0; }\n\n.header {\n  height: 80px;\n  line-height: 80px;\n  display: block;\n  outline: 0;\n  list-style: none;\n  color: #495060;\n  font-size: 14px;\n  position: relative;\n  background: #fff;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n  .header .left-panel {\n    float: left;\n    padding-left: 10px; }\n    .header .left-panel > a {\n      color: red;\n      text-decoration: none;\n      font-weight: 900;\n      font-size: 32px; }\n  .header .right-panel {\n    float: right;\n    margin-right: 250px; }\n    .header .right-panel ul li {\n      display: inline-block;\n      margin: 0 50px; }\n\n#main-content {\n  position: relative;\n  height: 100%; }\n  #main-content .left-panel {\n    position: absolute;\n    width: 200px;\n    background: #fff;\n    height: 100%;\n    border-right: 1px solid #ddd;\n    top: 1px;\n    bottom: 0;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n    #main-content .left-panel .nav {\n      margin: 10px 0; }\n      #main-content .left-panel .nav li {\n        padding: 8px 15px;\n        font-size: 16px; }\n        #main-content .left-panel .nav li:hover {\n          background: #edf1f5;\n          color: #2d8cf0; }\n  #main-content .right-panel {\n    margin-left: 200px;\n    padding: 20px; }\n    #main-content .right-panel .case-type {\n      border-left: 5px solid #2d8cf0;\n      padding-left: 10px; }\n    #main-content .right-panel .case-list .case-box {\n      margin: 10px 0;\n      border: 1px solid #eee;\n      border-radius: 5px;\n      background: #fff;\n      position: relative;\n      transition: all .2s ease-in-out; }\n      #main-content .right-panel .case-list .case-box .case-demo,\n      #main-content .right-panel .case-list .case-box .case-code {\n        display: inline-block;\n        width: 49%;\n        height: 400px;\n        overflow: auto; }\n        #main-content .right-panel .case-list .case-box .case-demo > div,\n        #main-content .right-panel .case-list .case-box .case-code > div {\n          padding: 10px; }\n        #main-content .right-panel .case-list .case-box .case-demo .custom-tab-content,\n        #main-content .right-panel .case-list .case-box .case-code .custom-tab-content {\n          max-height: 300px;\n          overflow: auto; }\n        #main-content .right-panel .case-list .case-box .case-demo .op,\n        #main-content .right-panel .case-list .case-box .case-code .op {\n          position: absolute;\n          bottom: 0; }\n      #main-content .right-panel .case-list .case-box .case-split {\n        display: block;\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        left: 50%;\n        border: 1px dashed #eee; }\n      #main-content .right-panel .case-list .case-box:hover {\n        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15); }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0; }\n\nbody {\n  background: #edf1f5; }\n\nul {\n  display: block;\n  list-style-type: none;\n  -webkit-margin-before: 0;\n  -webkit-margin-after: 0;\n  -webkit-margin-start: 0px;\n  -webkit-margin-end: 0px;\n  -webkit-padding-start: 0; }\n\na {\n  text-decoration: none; }\n\n.header {\n  height: 80px;\n  line-height: 80px;\n  display: block;\n  outline: 0;\n  list-style: none;\n  color: #495060;\n  font-size: 14px;\n  position: relative;\n  background: #fff;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n  .header .left-panel {\n    float: left;\n    padding-left: 10px; }\n    .header .left-panel > a {\n      color: #2d8cf0;\n      text-decoration: none;\n      font-weight: 900;\n      font-size: 32px; }\n  .header .right-panel {\n    float: right;\n    margin-right: 250px; }\n    .header .right-panel ul li {\n      display: inline-block;\n      margin: 0 50px; }\n\n#main-content {\n  position: relative;\n  height: 100%; }\n  #main-content .left-panel {\n    position: absolute;\n    width: 200px;\n    background: #fff;\n    height: 100%;\n    border-right: 1px solid #ddd;\n    top: 1px;\n    bottom: 0;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n    #main-content .left-panel .nav {\n      margin: 10px 0; }\n      #main-content .left-panel .nav li {\n        padding: 8px 15px;\n        font-size: 16px;\n        cursor: pointer; }\n        #main-content .left-panel .nav li:hover {\n          background: #edf1f5;\n          color: #2d8cf0; }\n  #main-content .right-panel {\n    margin-left: 200px;\n    padding: 20px; }\n    #main-content .right-panel .case-type {\n      border-left: 5px solid #2d8cf0;\n      padding-left: 10px; }\n    #main-content .right-panel .case-list .case-box {\n      margin: 10px 0;\n      border: 1px solid #eee;\n      border-radius: 5px;\n      background: #fff;\n      position: relative;\n      transition: all .2s ease-in-out; }\n      #main-content .right-panel .case-list .case-box .case-demo,\n      #main-content .right-panel .case-list .case-box .case-code {\n        display: inline-block;\n        width: 48%;\n        height: 400px;\n        overflow: auto;\n        position: relative; }\n        #main-content .right-panel .case-list .case-box .case-demo .case-code-detail,\n        #main-content .right-panel .case-list .case-box .case-code .case-code-detail {\n          height: 380px;\n          overflow: scroll; }\n        #main-content .right-panel .case-list .case-box .case-demo .op,\n        #main-content .right-panel .case-list .case-box .case-code .op {\n          position: absolute;\n          bottom: 0;\n          background: #fff;\n          width: 100%;\n          text-align: right;\n          border-top: 1px solid #eee;\n          padding: 5px 0; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a,\n          #main-content .right-panel .case-list .case-box .case-code .op a {\n            cursor: pointer; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a:hover,\n          #main-content .right-panel .case-list .case-box .case-code .op a:hover {\n            color: #2d8cf0; }\n      #main-content .right-panel .case-list .case-box .case-split {\n        display: block;\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        left: 46%;\n        border: 1px dashed #eee; }\n      #main-content .right-panel .case-list .case-box:hover {\n        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15); }\n", ""]);
 
 // exports
 
@@ -10935,12 +11115,162 @@ return jQuery;
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  line: ['example1']
+};
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./line/example1/jsonCode.js": 9,
+	"./line/example1/raxCode.js": 10,
+	"./line/example1/reactCode.js": 11
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 8;
+
+/***/ }),
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-const code = `
-var config2 = {
+const config = {
+  data: [
+    {age: '5', gender: '女性', mean: 101, lower: 93, upper: 109 },
+    {age: '10', gender: '女性', mean: 120, lower: 110, upper: 124},
+    {age: '15', gender: '女性', mean: 150, lower: 134, upper: 165},
+    {age: '20', gender: '女性', mean: 167, lower: 151.6, upper: 178},
+    {age: '25', gender: '女性', mean: 175, lower: 156.7, upper: 181},
+    {age: '30', gender: '女性', mean: 175, lower: 160, upper: 181},
+    {age: '35', gender: '女性', mean: 173, lower: 156, upper: 181},
+    {age: '40', gender: '女性', mean: 170, lower: 152, upper: 173},
+    {age: '45', gender: '女性', mean: 170, lower: 154, upper: 176},
+    {age: '50', gender: '女性', mean: 163, lower: 149, upper: 166},
+    {age: '5', gender: '男性', mean: 104, lower: 101, upper: 111},
+    {age: '10', gender: '男性', mean: 130, lower: 120, upper: 134},
+    {age: '15', gender: '男性', mean: 165, lower: 149, upper: 180},
+    {age: '20', gender: '男性', mean: 178, lower: 152.6, upper: 193},
+    {age: '25', gender: '男性', mean: 185, lower: 166.7, upper: 194},
+    {age: '30', gender: '男性', mean: 183, lower: 158, upper: 189},
+    {age: '35', gender: '男性', mean: 182, lower: 165, upper: 192},
+    {age: '40', gender: '男性', mean: 180, lower: 172, upper: 190},
+    {age: '45', gender: '男性', mean: 182, lower: 166, upper: 188},
+    {age: '50', gender: '男性', mean: 177, lower: 163, upper: 192},
+  ],
+  dataDef: [
+    {
+      key: 'age',
+      mark: 'column',
+      scale: {},
+    }, {
+      key: 'gender',
+      mark: 'color',
+      scale: {},
+    },
+    {
+      key: 'mean',
+      mark: 'row',
+      scale: {},
+    },
+  ],
+  axis: [{
+    dataKey: 'age',
+    show: true,
+    position: 'bottom',
+    line: 'normal',   // 可选 normal  bold
+    label: {
+      textStyle: 'bold',  // 可选 normal  bold
+    },
+    title: {
+      textStyle: 'bold',   // 可选 normal  bold
+    },
+    tickLine: 'bold',   // 可选 normal  bold
+    subTickCount: 5,
+    subTickLine: 'normal',
+    grid: 'background',  // 可选 line  background
+    name: {
+      value: 'age',
+      position: 'right'
+    },
+  }, {
+    dataKey: 'mean',
+    show: true,
+    position: 'left',
+    name: {
+      value: 'mean',
+      position: 'top'
+    },
+  }],
+  legend: {
+    position: 'bottom',
+    name: '性别',
+    // formatter: (v: any) => {
+    //   return v;
+    // },
+    label: {
+      fill: 'blue',
+      fontSize: 14,
+      shape: 'diamond',
+    },
+  },
+  tooltip: {
+    show: false,
+    showTitle: false,
+    offset: 0,
+    crosshairs: {
+      type: 'y',
+      stroke: '#aaa',
+      lineWidth: '2',
+      lineDash: [1, 1],
+    },
+  },
+  series: {
+    position: ['age', 'mean'],
+    gemo: 'area',
+  },
+  chart: {
+    type: 'commonChart',
+    container: 'example1',
+    width: 550,
+    height: 400,
+  },
+};
+/* harmony export (immutable) */ __webpack_exports__["config"] = config;
+
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+const config = `{
   data: [
     { month: 'Jan', Tokyo: 7.0, London: 3.9 },
     { month: 'Feb', Tokyo: 6.9, London: 4.2 },
@@ -11011,122 +11341,30 @@ var config2 = {
     width: 400,
     height: 300,
   },
-};
+}`;
+/* harmony export (immutable) */ __webpack_exports__["config"] = config;
 
 
+const script = `
 var labelFormatter = function (val) {
   return val + '°C';
-}
-ReactDOM.render(
-  <div>
-    <Chart width={500} height={400} data={config2.data} dataPre={config2.dataPre} dataDef={config2.dataDef}>
-        <SmoothLine size={2} />
-        <Point size={4} style={{ stroke: '#fff', lineWidth: 1 }} />
-        <Tooltip crosshairs={{ type: 'line' }} />
-        <Legend />
-        <Axis dataKey="temperature" label={{ formatter: labelFormatter.bind(this)}} />
-      </Chart>
-  </div>,
-  document.getElementById('example1')
-);
-
-`
-/* harmony export (immutable) */ __webpack_exports__["code"] = code;
+};`
+/* harmony export (immutable) */ __webpack_exports__["script"] = script;
 
 
+const template = `
+<div>
+<Chart width={500} height={380} data={config.data} dataPre={config.dataPre} dataDef={config.dataDef}>
+    <SmoothLine size={2} />
+    <Point size={4} style={{ stroke: '#fff', lineWidth: 1 }} />
+    <Tooltip crosshairs={{ type: 'line' }} />
+    <Legend />
+    <Axis dataKey="temperature" label={{ formatter: labelFormatter.bind(this)}} />
+  </Chart>
+</div>
+`;
+/* harmony export (immutable) */ __webpack_exports__["template"] = template;
 
-// const config = {
-//   data: [
-//     { month: 'Jan', Tokyo: 7.0, London: 3.9 },
-//     { month: 'Feb', Tokyo: 6.9, London: 4.2 },
-//     { month: 'Mar', Tokyo: 9.5, London: 5.7 },
-//     { month: 'Apr', Tokyo: 14.5, London: 8.5 },
-//     { month: 'May', Tokyo: 18.4, London: 11.9 },
-//     { month: 'Jun', Tokyo: 21.5, London: 15.2 },
-//     { month: 'Jul', Tokyo: 25.2, London: 17.0 },
-//     { month: 'Aug', Tokyo: 26.5, London: 16.6 },
-//     { month: 'Sep', Tokyo: 23.3, London: 14.2 },
-//     { month: 'Oct', Tokyo: 18.3, London: 10.3 },
-//     { month: 'Nov', Tokyo: 13.9, London: 6.6 },
-//     { month: 'Dec', Tokyo: 9.6, London: 4.8 }
-//   ],
-//   dataPre: {
-//     transform: [{
-//       type: 'fold',
-//       fields: ['Tokyo', 'London'],
-//       key: 'city',
-//       value: 'temperature',
-//     }]
-//   },
-//   dataDef: [
-//     {
-//       key: 'month',
-//       mark: 'column',
-//       scale: {
-//         range: [0, 1],
-//       },
-//     }, {
-//       key: 'city',
-//       mark: 'color',
-//       scale: {},
-//     }, {
-//       key: 'temperature',
-//       mark: 'row',
-//       scale: {},
-//     },
-//   ],
-//   axis: [{
-//     show: true,
-//     dataKey: 'temperature',
-//     label: {
-//       formatter: val => {
-//         return val + '°C';
-//       }
-//     }
-//   }],
-//   legend: true,
-//   tooltip: {
-//     crosshairs: {
-//       type: 'line'
-//     }
-//   },
-//   series: [{
-//     quickType: 'smoothLine',
-//     size: 2,
-//   }, {
-//     quickType: 'point',
-//     size: 4,
-//     style: {
-//       stroke: '#fff',
-//       lineWidth: 1,
-//     },
-//   }],
-//   chart: {
-//     container: 'demo2',
-//     width: 800,
-//     height: 400,
-//   },
-// };
-
-// const script = `var labelFormatter = function (val) {
-//   return val + '°C';
-// }`;
-
-// const code = `<Chart width={800} height={400} data={config2.data} dataPre={config2.dataPre} dataDef={config2.dataDef}>
-//   <SmoothLine size={2} />
-//   <Point size={4} style={{ stroke: '#fff', lineWidth: 1 }} />
-//   <Tooltip crosshairs={{ type: 'line' }} />
-//   <Legend />
-//   <Axis dataKey="temperature" label={{ formatter: labelFormatter.bind(this)}} />
-// </Chart>`;
-
-// const template = `<div id="demo2"></div>`;
-
-// module.exports = {
-//   config,
-//   script,
-//   code,
-// };
 
 
 /***/ })
