@@ -1,9 +1,11 @@
 
 require('./index.scss');
-var $ = require('jquery');
+const $ = require('jquery');
+// const handlebars = require('handlebars');
 const codeConfig = require('../../examples/index');
 
 // const caseBoxTpl = require('./caseBox.tpl');
+
 class App {
   constructor() {
     this.attrs = {
@@ -146,7 +148,6 @@ class App {
   }
 
   renderJson() {
-    console.log(this.attrs.codes);
     this.attrs.codes.forEach((code, index) => {
       const str = JSON.stringify(code.config, null, 2);
       const tpl = `<div class="case-box">
@@ -155,9 +156,7 @@ class App {
         </div>
         <div class="case-split"></div>
         <div class="case-code">
-          <div class="case-code-detail">
-            ${str}
-          </div>
+          <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
             <a class="run" data-index="${index}">运行</a>
             <a>复制</a>
@@ -165,6 +164,10 @@ class App {
         </div>
       </div>`;
       $('.case-list').append(tpl);
+      var editor = ace.edit(`code${index}`);
+      editor.env.editor.setValue(str, 1);
+      editor.env.editor.setReadOnly(true);
+
       code.config.chart.container = `example${index}`;
       RechartCore.ChartBuilder(code.config);
     });
@@ -172,21 +175,17 @@ class App {
 
   renderReact() {
     this.attrs.codes.forEach((code, index) => {
-      const scriptCode = `
-      var config = ${code.config};
-      ${code.script}
-      ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
-      const str = JSON.stringify(scriptCode, null, 2);
-      console.log(scriptCode, str);
-      const tpl = `<div class="case-box">
+      const scriptCode = `var config = ${code.config};
+${code.script}
+ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
+
+      const tpl = `<div class="case-box" id="caseBox${index}">
         <div class="case-demo">
           <div id="example${index}"></div>
         </div>
         <div class="case-split"></div>
         <div class="case-code">
-          <div class="case-code-detail">
-            ${str}
-          </div>
+          <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
             <a class="run" data-index="${index}">运行</a>
             <a>复制</a>
@@ -194,6 +193,9 @@ class App {
         </div>
       </div>`;
       $('.case-list').append(tpl);
+      var editor = ace.edit(`code${index}`);
+      editor.env.editor.setValue(scriptCode, 1);
+      editor.env.editor.setReadOnly(true);
       $('.case-list').append(`<script type="text/babel">${scriptCode}</script>`);
     });
   }

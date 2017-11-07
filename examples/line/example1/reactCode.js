@@ -78,7 +78,7 @@ var labelFormatter = function (val) {
 
 export const template = `
 <div>
-<Chart width={500} height={380} data={config.data} dataPre={config.dataPre} dataDef={config.dataDef}>
+  <Chart width={500} height={380} data={config.data} dataPre={config.dataPre} dataDef={config.dataDef}>
     <SmoothLine size={2} />
     <Point size={4} style={{ stroke: '#fff', lineWidth: 1 }} />
     <Tooltip crosshairs={{ type: 'line' }} />
