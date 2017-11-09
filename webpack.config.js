@@ -5,6 +5,7 @@ const env = process.env.NODE_ENV;
 let config = {
   entry: {
     demo: './pages/demo/index',
+    api: './pages/api/index',
   }, // 入口文件
 
   // 输出文件 build下的bundle.js
@@ -15,7 +16,7 @@ let config = {
   },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json", ".scss"]
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".scss"]
   },
   // 使用loader模块
   module: {
@@ -23,6 +24,7 @@ let config = {
       {test: /\.css$/, loader: "style-loader!css-loader"},
       {test: /\.scss$/, loader: "style-loader!css-loader!sass-loader"},
       {test: /\.tsx?$/, loader: "ts-loader" },
+      { test: /\.md$/, loader: "babel-loader!remarkdown-loader?Demo=remarkdown-doc", },
     ]
   },
   plugins: [
