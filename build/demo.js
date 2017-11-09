@@ -69,10 +69,12 @@
 
 
 __webpack_require__(1);
-var $ = __webpack_require__(6);
+const $ = __webpack_require__(6);
+// const handlebars = require('handlebars');
 const codeConfig = __webpack_require__(7);
 
 // const caseBoxTpl = require('./caseBox.tpl');
+
 class App {
   constructor() {
     this.attrs = {
@@ -89,23 +91,26 @@ class App {
     const lang = langResult ? langResult[2] : 'json';
     this.attrs.language = lang;
     Object.keys(codeConfig).forEach((chartType) => {
-      const exampleFolders = codeConfig[chartType];
+      const exampleFolders = codeConfig[chartType].examples || [];
       exampleFolders.forEach((folder) => {
         const code = __webpack_require__(8)(`./${chartType}/${folder}/${lang}Code.js`);
         this.attrs.codes.push(code);
       });
     });
-    this.render();
+    this.renderExample();
+
+    this.renderNav();
     this.bindEvent();
   }
 
   renderNav() {
-
-  }
-
-
-  renderExample() {
-
+    const language = this.attrs.language;
+    let navTpl = '';
+    Object.keys(codeConfig).forEach((chartType) => {
+      const cnName= codeConfig[chartType].cnName || '';
+      navTpl += `<li><a href="/demo.html?type=${chartType}&language=${language}">${cnName}</a></li>`;
+    });
+    $('#nav').append(navTpl);
   }
 
   bindEvent() {
@@ -194,7 +199,7 @@ class App {
     return data;
   }
 
-  render() {
+  renderExample() {
     const language = this.attrs.language;
     switch(language) {
       case 'json':
@@ -215,7 +220,6 @@ class App {
   }
 
   renderJson() {
-    console.log(this.attrs.codes);
     this.attrs.codes.forEach((code, index) => {
       const str = JSON.stringify(code.config, null, 2);
       const tpl = `<div class="case-box">
@@ -224,9 +228,7 @@ class App {
         </div>
         <div class="case-split"></div>
         <div class="case-code">
-          <div class="case-code-detail">
-            ${str}
-          </div>
+          <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
             <a class="run" data-index="${index}">运行</a>
             <a>复制</a>
@@ -234,6 +236,10 @@ class App {
         </div>
       </div>`;
       $('.case-list').append(tpl);
+      var editor = ace.edit(`code${index}`);
+      editor.env.editor.setValue(str, 1);
+      editor.env.editor.setReadOnly(true);
+
       code.config.chart.container = `example${index}`;
       RechartCore.ChartBuilder(code.config);
     });
@@ -241,21 +247,17 @@ class App {
 
   renderReact() {
     this.attrs.codes.forEach((code, index) => {
-      const scriptCode = `
-      var config = ${code.config};
-      ${code.script}
-      ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
-      const str = JSON.stringify(scriptCode, null, 2);
-      console.log(scriptCode, str);
-      const tpl = `<div class="case-box">
+      const scriptCode = `var config = ${code.config};
+${code.script}
+ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
+
+      const tpl = `<div class="case-box" id="caseBox${index}">
         <div class="case-demo">
           <div id="example${index}"></div>
         </div>
         <div class="case-split"></div>
         <div class="case-code">
-          <div class="case-code-detail">
-            ${str}
-          </div>
+          <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
             <a class="run" data-index="${index}">运行</a>
             <a>复制</a>
@@ -263,6 +265,9 @@ class App {
         </div>
       </div>`;
       $('.case-list').append(tpl);
+      var editor = ace.edit(`code${index}`);
+      editor.env.editor.setValue(scriptCode, 1);
+      editor.env.editor.setReadOnly(true);
       $('.case-list').append(`<script type="text/babel">${scriptCode}</script>`);
     });
   }
@@ -312,7 +317,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0; }\n\nbody {\n  background: #edf1f5; }\n\nul {\n  display: block;\n  list-style-type: none;\n  -webkit-margin-before: 0;\n  -webkit-margin-after: 0;\n  -webkit-margin-start: 0px;\n  -webkit-margin-end: 0px;\n  -webkit-padding-start: 0; }\n\na {\n  text-decoration: none; }\n\n.header {\n  height: 80px;\n  line-height: 80px;\n  display: block;\n  outline: 0;\n  list-style: none;\n  color: #495060;\n  font-size: 14px;\n  position: relative;\n  background: #fff;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n  .header .left-panel {\n    float: left;\n    padding-left: 10px; }\n    .header .left-panel > a {\n      color: #2d8cf0;\n      text-decoration: none;\n      font-weight: 900;\n      font-size: 32px; }\n  .header .right-panel {\n    float: right;\n    margin-right: 250px; }\n    .header .right-panel ul li {\n      display: inline-block;\n      margin: 0 50px; }\n\n#main-content {\n  position: relative;\n  height: 100%; }\n  #main-content .left-panel {\n    position: absolute;\n    width: 200px;\n    background: #fff;\n    height: 100%;\n    border-right: 1px solid #ddd;\n    top: 1px;\n    bottom: 0;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n    #main-content .left-panel .nav {\n      margin: 10px 0; }\n      #main-content .left-panel .nav li {\n        padding: 8px 15px;\n        font-size: 16px;\n        cursor: pointer; }\n        #main-content .left-panel .nav li:hover {\n          background: #edf1f5;\n          color: #2d8cf0; }\n  #main-content .right-panel {\n    margin-left: 200px;\n    padding: 20px; }\n    #main-content .right-panel .case-type {\n      border-left: 5px solid #2d8cf0;\n      padding-left: 10px; }\n    #main-content .right-panel .case-list .case-box {\n      margin: 10px 0;\n      border: 1px solid #eee;\n      border-radius: 5px;\n      background: #fff;\n      position: relative;\n      transition: all .2s ease-in-out; }\n      #main-content .right-panel .case-list .case-box .case-demo,\n      #main-content .right-panel .case-list .case-box .case-code {\n        display: inline-block;\n        width: 48%;\n        height: 400px;\n        overflow: auto;\n        position: relative; }\n        #main-content .right-panel .case-list .case-box .case-demo .case-code-detail,\n        #main-content .right-panel .case-list .case-box .case-code .case-code-detail {\n          height: 380px;\n          overflow: scroll; }\n        #main-content .right-panel .case-list .case-box .case-demo .op,\n        #main-content .right-panel .case-list .case-box .case-code .op {\n          position: absolute;\n          bottom: 0;\n          background: #fff;\n          width: 100%;\n          text-align: right;\n          border-top: 1px solid #eee;\n          padding: 5px 0; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a,\n          #main-content .right-panel .case-list .case-box .case-code .op a {\n            cursor: pointer; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a:hover,\n          #main-content .right-panel .case-list .case-box .case-code .op a:hover {\n            color: #2d8cf0; }\n      #main-content .right-panel .case-list .case-box .case-split {\n        display: block;\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        left: 46%;\n        border: 1px dashed #eee; }\n      #main-content .right-panel .case-list .case-box:hover {\n        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15); }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  color: #333; }\n\nbody {\n  background: #edf1f5; }\n\nul {\n  display: block;\n  list-style-type: none;\n  -webkit-margin-before: 0;\n  -webkit-margin-after: 0;\n  -webkit-margin-start: 0px;\n  -webkit-margin-end: 0px;\n  -webkit-padding-start: 0; }\n\na {\n  text-decoration: none; }\n\n.header {\n  height: 80px;\n  line-height: 80px;\n  display: block;\n  outline: 0;\n  list-style: none;\n  color: #495060;\n  font-size: 14px;\n  position: relative;\n  background: #fff;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n  .header .left-panel {\n    float: left;\n    padding-left: 10px; }\n    .header .left-panel > a {\n      color: #2d8cf0;\n      font-weight: 900;\n      font-size: 32px; }\n  .header .right-panel {\n    float: right;\n    margin-right: 250px; }\n    .header .right-panel ul li {\n      display: inline-block;\n      margin: 0 50px; }\n\n#main-content {\n  position: relative;\n  height: 100%; }\n  #main-content .left-panel {\n    position: absolute;\n    width: 200px;\n    background: #fff;\n    height: 100%;\n    border-right: 1px solid #ddd;\n    top: 1px;\n    bottom: 0;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n    #main-content .left-panel .nav {\n      margin: 10px 0; }\n      #main-content .left-panel .nav li {\n        padding: 8px 15px;\n        font-size: 16px;\n        cursor: pointer; }\n        #main-content .left-panel .nav li:hover {\n          background: #edf1f5;\n          color: #2d8cf0; }\n  #main-content .right-panel {\n    margin-left: 200px;\n    padding: 20px; }\n    #main-content .right-panel .case-type {\n      border-left: 5px solid #2d8cf0;\n      padding-left: 10px; }\n    #main-content .right-panel .case-list .case-box {\n      margin: 10px 0;\n      border: 1px solid #eee;\n      border-radius: 5px;\n      background: #fff;\n      position: relative;\n      transition: all .2s ease-in-out; }\n      #main-content .right-panel .case-list .case-box .case-demo,\n      #main-content .right-panel .case-list .case-box .case-code {\n        display: inline-block;\n        width: 48%;\n        height: 400px;\n        overflow: hidden;\n        position: relative;\n        padding: 15px;\n        box-sizing: border-box; }\n        #main-content .right-panel .case-list .case-box .case-demo .case-code-detail,\n        #main-content .right-panel .case-list .case-box .case-code .case-code-detail {\n          height: 340px;\n          overflow: scroll; }\n        #main-content .right-panel .case-list .case-box .case-demo .op,\n        #main-content .right-panel .case-list .case-box .case-code .op {\n          position: absolute;\n          bottom: 0;\n          background: #fff;\n          width: 100%;\n          border-top: 1px solid #eee;\n          padding: 5px 0; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a,\n          #main-content .right-panel .case-list .case-box .case-code .op a {\n            cursor: pointer;\n            padding: 2px 15px;\n            background: #edf1f5;\n            display: inline-block; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a:hover,\n          #main-content .right-panel .case-list .case-box .case-code .op a:hover {\n            background: #2d8cf0;\n            color: #fff; }\n      #main-content .right-panel .case-list .case-box .case-split {\n        display: block;\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        left: 48%;\n        border: 1px dashed #eee; }\n      #main-content .right-panel .case-list .case-box:hover {\n        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15); }\n", ""]);
 
 // exports
 
@@ -11118,7 +11123,10 @@ return jQuery;
 /***/ (function(module, exports) {
 
 module.exports = {
-  line: ['example1']
+  line: {
+    cnName: '线性图',
+    examples: ['example1'],
+  },
 };
 
 
@@ -11354,7 +11362,7 @@ var labelFormatter = function (val) {
 
 const template = `
 <div>
-<Chart width={500} height={380} data={config.data} dataPre={config.dataPre} dataDef={config.dataDef}>
+  <Chart width={500} height={380} data={config.data} dataPre={config.dataPre} dataDef={config.dataDef}>
     <SmoothLine size={2} />
     <Point size={4} style={{ stroke: '#fff', lineWidth: 1 }} />
     <Tooltip crosshairs={{ type: 'line' }} />
