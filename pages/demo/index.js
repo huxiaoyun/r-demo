@@ -22,23 +22,26 @@ class App {
     const lang = langResult ? langResult[2] : 'json';
     this.attrs.language = lang;
     Object.keys(codeConfig).forEach((chartType) => {
-      const exampleFolders = codeConfig[chartType];
+      const exampleFolders = codeConfig[chartType].examples || [];
       exampleFolders.forEach((folder) => {
         const code = require(`../../examples/${chartType}/${folder}/${lang}Code.js`);
         this.attrs.codes.push(code);
       });
     });
-    this.render();
+    this.renderExample();
+
+    this.renderNav();
     this.bindEvent();
   }
 
   renderNav() {
-
-  }
-
-
-  renderExample() {
-
+    const language = this.attrs.language;
+    let navTpl = '';
+    Object.keys(codeConfig).forEach((chartType) => {
+      const cnName= codeConfig[chartType].cnName || '';
+      navTpl += `<li><a href="/demo.html?type=${chartType}&language=${language}">${cnName}</a></li>`;
+    });
+    $('#nav').append(navTpl);
   }
 
   bindEvent() {
@@ -127,7 +130,7 @@ class App {
     return data;
   }
 
-  render() {
+  renderExample() {
     const language = this.attrs.language;
     switch(language) {
       case 'json':

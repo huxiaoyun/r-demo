@@ -1,3 +1,6 @@
 module.exports = {
-  line: ['example1']
+  line: {
+    cnName: '线性图',
+    examples: ['example1'],
+  },
 };
