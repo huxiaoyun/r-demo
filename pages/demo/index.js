@@ -130,6 +130,10 @@ class App {
     return data;
   }
 
+  getJsfiddleVueData(index) {
+
+  }
+
   renderExample() {
     const language = this.attrs.language;
     switch(language) {
@@ -142,6 +146,7 @@ class App {
       case 'rax':
         break;
       case 'vue':
+        this.renderVue();
         break;
       case 'angular':
         break;
@@ -177,7 +182,51 @@ class App {
   }
 
   renderVue() {
+    this.attrs.codes.forEach((code, index) => {
+      const vueTpl = `
+<div id="example${index}">
+  <v-chart :width="500" :height="400" :data="config.data" :data-pre="config.dataPre" :data-def="config.dataDef">
+    <v-smooth-line :size="2" />
+    <v-point :size="4" :v-style="{stroke: '#fff', lineWidth: 1}" />
+    <v-tooltip :crosshairs="{type: 'line'}" />
+    <v-legend v-if="showVLegend" />
+    <v-axis data-key="temperature" :label="{formatter: labelFormatter }" />
+  </v-chart>
+</div>`;
+      const scriptCode = `
+var config = ${code.config}
+new Vue({
+  el: '#example${index}',
+  data: {
+    config,
+  }
+});
+`;
+      const showCode = `
+${vueTpl}
 
+${scriptCode}
+`;
+      const runCode = `<script type="text/javascript">${scriptCode}</script>`;
+      const tpl = `<div class="case-box">
+        <div class="case-demo">
+          ${vueTpl}
+        </div>
+        <div class="case-split"></div>
+        <div class="case-code">
+          <pre class="case-code-detail" id="code${index}"></pre>
+          <div class="op">
+            <a class="run" data-index="${index}">试一试</a>
+            <a>复制</a>
+          </div>
+        </div>
+      </div>`;
+      $('.case-list').append(tpl);
+      var editor = ace.edit(`code${index}`);
+      editor.env.editor.setValue(showCode, 1);
+      editor.env.editor.setReadOnly(true);
+      $('.case-list').append(runCode);
+    });
   }
 
   renderReact() {
