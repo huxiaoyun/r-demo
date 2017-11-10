@@ -199,6 +199,10 @@ class App {
     return data;
   }
 
+  getJsfiddleVueData(index) {
+
+  }
+
   renderExample() {
     const language = this.attrs.language;
     switch(language) {
@@ -211,6 +215,7 @@ class App {
       case 'rax':
         break;
       case 'vue':
+        this.renderVue();
         break;
       case 'angular':
         break;
@@ -230,7 +235,7 @@ class App {
         <div class="case-code">
           <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
-            <a class="run" data-index="${index}">运行</a>
+            <a class="run" data-index="${index}">试一试</a>
             <a>复制</a>
           </div>
         </div>
@@ -242,6 +247,54 @@ class App {
 
       code.config.chart.container = `example${index}`;
       RechartCore.ChartBuilder(code.config);
+    });
+  }
+
+  renderVue() {
+    this.attrs.codes.forEach((code, index) => {
+      const vueTpl = `
+<div id="example${index}">
+  <v-chart :width="500" :height="400" :data="config.data" :data-pre="config.dataPre" :data-def="config.dataDef">
+    <v-smooth-line :size="2" />
+    <v-point :size="4" :v-style="{stroke: '#fff', lineWidth: 1}" />
+    <v-tooltip :crosshairs="{type: 'line'}" />
+    <v-legend v-if="showVLegend" />
+    <v-axis data-key="temperature" :label="{formatter: labelFormatter }" />
+  </v-chart>
+</div>`;
+      const scriptCode = `
+var config = ${code.config}
+new Vue({
+  el: '#example${index}',
+  data: {
+    config,
+  }
+});
+`;
+      const showCode = `
+${vueTpl}
+
+${scriptCode}
+`;
+      const runCode = `<script type="text/javascript">${scriptCode}</script>`;
+      const tpl = `<div class="case-box">
+        <div class="case-demo">
+          ${vueTpl}
+        </div>
+        <div class="case-split"></div>
+        <div class="case-code">
+          <pre class="case-code-detail" id="code${index}"></pre>
+          <div class="op">
+            <a class="run" data-index="${index}">试一试</a>
+            <a>复制</a>
+          </div>
+        </div>
+      </div>`;
+      $('.case-list').append(tpl);
+      var editor = ace.edit(`code${index}`);
+      editor.env.editor.setValue(showCode, 1);
+      editor.env.editor.setReadOnly(true);
+      $('.case-list').append(runCode);
     });
   }
 
@@ -259,7 +312,7 @@ ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
         <div class="case-code">
           <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
-            <a class="run" data-index="${index}">运行</a>
+            <a class="run" data-index="${index}">试一试</a>
             <a>复制</a>
           </div>
         </div>
@@ -11137,7 +11190,8 @@ module.exports = {
 var map = {
 	"./line/example1/jsonCode.js": 9,
 	"./line/example1/raxCode.js": 10,
-	"./line/example1/reactCode.js": 11
+	"./line/example1/reactCode.js": 11,
+	"./line/example1/vueCode.js": 12
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -11372,6 +11426,57 @@ const template = `
 </div>
 `;
 /* harmony export (immutable) */ __webpack_exports__["template"] = template;
+
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+const config = `{
+  data: [
+    { month: 'Jan', Tokyo: 7.0, London: 3.9 },
+    { month: 'Feb', Tokyo: 6.9, London: 4.2 },
+    { month: 'Mar', Tokyo: 9.5, London: 5.7 },
+    { month: 'Apr', Tokyo: 14.5, London: 8.5 },
+    { month: 'May', Tokyo: 18.4, London: 11.9 },
+    { month: 'Jun', Tokyo: 21.5, London: 15.2 },
+    { month: 'Jul', Tokyo: 25.2, London: 17.0 },
+    { month: 'Aug', Tokyo: 26.5, London: 16.6 },
+    { month: 'Sep', Tokyo: 23.3, London: 14.2 },
+    { month: 'Oct', Tokyo: 18.3, London: 10.3 },
+    { month: 'Nov', Tokyo: 13.9, London: 6.6 },
+    { month: 'Dec', Tokyo: 9.6, London: 4.8 }
+  ],
+  dataPre: {
+    transform: [{
+      type: 'fold',
+      fields: ['Tokyo', 'London'],
+      key: 'city',
+      value: 'temperature',
+    }]
+  },
+  dataDef: [
+    {
+      key: 'month',
+      mark: 'column',
+      scale: {
+        range: [0, 1],
+      },
+    }, {
+      key: 'city',
+      mark: 'color',
+      scale: {},
+    }, {
+      key: 'temperature',
+      mark: 'row',
+      scale: {},
+    },
+  ],
+}`;
+/* harmony export (immutable) */ __webpack_exports__["config"] = config;
 
 
 
