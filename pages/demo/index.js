@@ -161,7 +161,7 @@ class App {
         <div class="case-code">
           <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
-            <a class="run" data-index="${index}">运行</a>
+            <a class="run" data-index="${index}">试一试</a>
             <a>复制</a>
           </div>
         </div>
@@ -174,6 +174,10 @@ class App {
       code.config.chart.container = `example${index}`;
       RechartCore.ChartBuilder(code.config);
     });
+  }
+
+  renderVue() {
+
   }
 
   renderReact() {
@@ -190,7 +194,7 @@ ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
         <div class="case-code">
           <pre class="case-code-detail" id="code${index}"></pre>
           <div class="op">
-            <a class="run" data-index="${index}">运行</a>
+            <a class="run" data-index="${index}">试一试</a>
             <a>复制</a>
           </div>
         </div>
