@@ -3,6 +3,14 @@
   padding: 0;
   color: #333;
 }
+@font-face {
+  font-family: 'iconfont';  /* project id 473307 */
+  src: url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.eot');
+  src: url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.svg#iconfont') format('svg');
+}
 body {
   background: #edf1f5;
 }
@@ -55,7 +63,7 @@ a {
   height: 100%;
   .left-panel {
     position: absolute;
-    width: 200px;
+    width: 150px;
     background: #fff;
     height: 100%;
     border-right: 1px solid #ddd;
@@ -70,21 +78,25 @@ a {
         cursor: pointer;
         &:hover {
           background: #edf1f5;
-          color: #2d8cf0;
+          a,.iconfont {
+            color: #2d8cf0;
+          }
         }
       }
     }
   }
   .right-panel {
-    margin-left: 200px;
-    padding: 20px;
+    margin-left: 150px;
+    padding: 10px;
     .case-type {
       border-left: 5px solid #2d8cf0;
-      padding-left: 10px;
+      padding: 5px 10px;
+      background: #fff;
+      border-radius: 5px;
     }
     .case-list {
       .case-box {
-        margin: 10px 0;
+        margin-top: 5px;
         border: 1px solid #eee;
         border-radius: 5px;
         background: #fff;

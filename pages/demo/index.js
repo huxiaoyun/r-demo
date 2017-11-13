@@ -37,9 +37,16 @@ class App {
   renderNav() {
     const language = this.attrs.language;
     let navTpl = '';
+
     Object.keys(codeConfig).forEach((chartType) => {
       const cnName= codeConfig[chartType].cnName || '';
-      navTpl += `<li><a href="/demo.html?type=${chartType}&language=${language}">${cnName}</a></li>`;
+      const icon = codeConfig[chartType].icon || '';
+      navTpl += `<li>
+        <a href="/demo.html?type=${chartType}&language=${language}">
+          <i class="iconfont icon-${icon}"></i>
+          ${cnName}
+        </a>
+      </li>`;
     });
     $('#nav').append(navTpl);
   }
@@ -85,7 +92,7 @@ class App {
       case 'rax':
         return;
       case 'vue':
-        return;
+      return this.getJsfiddleVueData(index);
       case 'angular':
         return;
       default:
@@ -123,15 +130,41 @@ class App {
           config.chart.container = 'example';
           RechartCore.ChartBuilder(config);
         `,
-        html: `<script src="https://huxiaoyun.github.io/r-demo/lib/rechart-core.js"></script><div id="example"></div>`,
-        panel_css: 1,
-        panel_js: 3
+      html: `<script src="https://huxiaoyun.github.io/r-demo/lib/rechart-core.js"></script><div id="example"></div>`,
+      panel_css: 1,
+      panel_js: 3
     };
     return data;
   }
 
   getJsfiddleVueData(index) {
-
+    const code = this.attrs.codes[index];
+    const config = JSON.stringify(code.config, null, 2);
+    const data = {
+      js: `var config = ${code.config};
+new Vue({
+  el: '#example',
+  data: {
+    config,
+  },
+});
+        `,
+      html: `
+<script src="https://huxiaoyun.github.io/r-demo/lib/vue.min.js"></script>
+<script src="https://huxiaoyun.github.io/r-demo/lib/rechart-vue.js"></script>
+<div id="example">
+  <v-chart :width="500" :height="400" :data="config.data" :data-pre="config.dataPre" :data-def="config.dataDef">
+    <v-smooth-line :size="2" />
+    <v-point :size="4" :v-style="{stroke: '#fff', lineWidth: 1}" />
+    <v-tooltip :crosshairs="{type: 'line'}" />
+    <v-legend />
+    <v-axis data-key="temperature"/>
+  </v-chart>
+</div>`,
+      panel_css: 1,
+      panel_js: 3
+    };
+    return data;
   }
 
   renderExample() {
@@ -189,8 +222,8 @@ class App {
     <v-smooth-line :size="2" />
     <v-point :size="4" :v-style="{stroke: '#fff', lineWidth: 1}" />
     <v-tooltip :crosshairs="{type: 'line'}" />
-    <v-legend v-if="showVLegend" />
-    <v-axis data-key="temperature" :label="{formatter: labelFormatter }" />
+    <v-legend />
+    <v-axis data-key="temperature" />
   </v-chart>
 </div>`;
       const scriptCode = `
