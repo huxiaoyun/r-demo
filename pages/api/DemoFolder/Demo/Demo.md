@@ -1,14 +1,14 @@
 ```js-precode
-import { Example } from './Example';
-import { Property } from './Property';
+import { Example } from './Example.tsx';
+import { Property } from './Property.tsx';
 ```
 
-# Demo
+## Demo
 
-## Example
+### Example
 ${Example}
 
-## Property
+### Property
 ${Property}
 
 

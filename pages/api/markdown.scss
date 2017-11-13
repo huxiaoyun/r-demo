@@ -5,7 +5,7 @@
 
 .remarkdown-container {
   -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+  // text-size-adjust: 100%;
   color: #333;
   font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
@@ -643,28 +643,47 @@
 
 .doc-demo {
   .doc-demo-head {
-    overflow: hidden;
-    .doc-demo-head-item {
-      float: left;
-      padding: 5px 20px;
-      background: #fafafa;
-      cursor: pointer;
-      color: #ccc;
-      font-size: 14px;
-      font-weight: bold;
-      &.active {
-        background: #eee;
-        color: #444;
-      }
-    }
-  }
-  .doc-code {
-    background: #eee;
+    display: none;
   }
   .doc-true-demo {
     position: relative;
-    overflow: hidden;
-    padding: 20px 10px;
-    border: 1px solid #eee;
+  }
+}
+
+.prop-list {
+  font-size: 12px;
+  color: #666;
+
+  .prop-item {
+    border-bottom: 1px solid #f5f5f5;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  .prop-header {
+    .prop-title {
+      height: 32px;
+      line-height: 32px;
+      margin-right: 20px;
+      color: #1281ca;
+      font-weight: 600;
+      font-size: 20px;
+    }
+    .prop-type {
+      padding-left: 20px;
+      color: #bf2a5c;
+    }
+    .prop-optional {
+      margin-left: 10px;
+    }
+  }
+  .prop-desc {
+    line-height: 1.5;
+  }
+  .prop-default {
+    line-height: 1.5;
+    .prop-default-title {
+      font-weight: 700;
+      margin-right: 10px;
+    }
   }
 }
