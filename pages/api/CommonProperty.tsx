@@ -17,10 +17,10 @@ export default class Property extends React.Component<Props, any> {
     return (
       <div className="prop-list">
         {
-          (this.props.properties || []).map((propItem: IPropItem) => {
+          (this.props.properties || []).map((propItem: IPropItem, i) => {
             const { title, type, optional, desc } = propItem;
             return (
-              <div className="prop-item">
+              <div className="prop-item" key={`prop-item-${i}`}>
                 <p className="prop-header">
                   <span className="prop-title">{title}</span>
                   {type && <span className="prop-type">{type}</span>}

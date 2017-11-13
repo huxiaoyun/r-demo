@@ -5,10 +5,8 @@ import components from './components';
 require('./index.scss');
 require('./markdown.scss');
 
-console.log(components)
 class App extends React.Component {
   render() {
-    console.log(this.props.children);
     return (
       <div>
         <div className="left-panel">
@@ -16,7 +14,6 @@ class App extends React.Component {
             {
               Object.keys(components).map((folderKey) => {
                 const itemsInFolder = components[folderKey];
-                console.log(Object.keys(itemsInFolder));
                 return (
                   <div key={`folder-${folderKey}`}>
                     <h3>{folderKey}</h3>
@@ -52,6 +49,7 @@ const routes = Object.keys(components).map((folderKey) => {
   return Object.keys(itemsInFolder).map((key) => {
     return (
       <Route
+        exact
         key={`component-${folderKey}-${key}`}
         path={`/${folderKey.toLowerCase()}/${key.toLowerCase()}`}
         component={itemsInFolder[key]}
@@ -59,10 +57,12 @@ const routes = Object.keys(components).map((folderKey) => {
     );
   });
 }).reduce((prev, curr) => { return prev.concat(curr); }, []);
-console.log(routes);
 
 render((
   <HashRouter basename="/">
-    <App>{routes}</App>
+    <App>
+      <Route exact path='/' component={() => (<div>home</div>)}/>
+      {routes}
+    </App>
   </HashRouter>
 ), document.getElementById('main-content'));
