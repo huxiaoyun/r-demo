@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "http://localhost:3000/build/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 198);
+/******/ 	return __webpack_require__(__webpack_require__.s = 199);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 120:
+/***/ 121:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -83,11 +83,11 @@ var _exception = __webpack_require__(42);
 
 var _exception2 = _interopRequireDefault(_exception);
 
-var _helpers = __webpack_require__(206);
+var _helpers = __webpack_require__(207);
 
-var _decorators = __webpack_require__(214);
+var _decorators = __webpack_require__(215);
 
-var _logger = __webpack_require__(216);
+var _logger = __webpack_require__(217);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -177,22 +177,22 @@ exports.logger = _logger2['default'];
 
 /***/ }),
 
-/***/ 198:
+/***/ 199:
 /***/ (function(module, exports, __webpack_require__) {
 
 
-__webpack_require__(199);
-const $ = __webpack_require__(201);
+__webpack_require__(200);
+const $ = __webpack_require__(202);
 
-const CONS = __webpack_require__(202);
+const CONS = __webpack_require__(203);
 
-const codeConfig = __webpack_require__(203);
+const codeConfig = __webpack_require__(204);
 
-const navTpl = __webpack_require__(204);
-const rightPanelTpl = __webpack_require__(221);
-const caseBoxJsonTpl = __webpack_require__(222);
-const caseBoxVueTpl = __webpack_require__(223);
-const caseBoxReactTpl = __webpack_require__(224);
+const navTpl = __webpack_require__(205);
+const rightPanelTpl = __webpack_require__(222);
+const caseBoxJsonTpl = __webpack_require__(223);
+const caseBoxVueTpl = __webpack_require__(224);
+const caseBoxReactTpl = __webpack_require__(225);
 
 class App {
   constructor() {
@@ -216,7 +216,7 @@ class App {
     this.attrs.chartType = chartType;
     const exampleFolders = codeConfig[chartType].examples || [];
     exampleFolders.forEach((folder) => {
-      const code = __webpack_require__(225)(`./${chartType}/${folder}/${lang}Code.js`);
+      const code = __webpack_require__(226)(`./${chartType}/${folder}/${lang}Code.js`);
       this.attrs.codes.push(code);
     });
 
@@ -323,9 +323,11 @@ class App {
     this.attrs.codes.forEach((code, i) => {
       $('.case-list').append(caseBoxJsonTpl({i}));
       var editor = ace.edit(`code${i}`);
-      const str = JSON.stringify(code.config, null, 2);
-      editor.env.editor.setValue(str, 1);
+      const showCode = JSON.stringify(code.config, null, 2);
+      editor.setTheme("ace/theme/textmate");
       editor.env.editor.setReadOnly(true);
+      editor.renderer.setShowGutter(false);
+      editor.env.editor.setValue(showCode, 1);
 
       code.config.chart.container = `example${i}`;
       RechartCore.ChartBuilder(code.config);
@@ -367,8 +369,10 @@ new Vue({
       $('.case-list').append(caseBoxVueTpl({ tpl: vueTpl, i }));
       var editor = ace.edit(`code${i}`);
       const showCode = `${vueTpl}${scriptCode}`;
-      editor.env.editor.setValue(showCode, 1);
+      editor.setTheme("ace/theme/textmate");
       editor.env.editor.setReadOnly(true);
+      editor.renderer.setShowGutter(false);
+      editor.env.editor.setValue(showCode, 1);
       $('.case-list').append(`<script type="text/javascript">${scriptCode}</script>`);
     });
   }
@@ -408,8 +412,10 @@ ReactDOM.render(${code.template}, document.getElementById('example${i}'))`;
 
       $('.case-list').append(caseBoxReactTpl({ i }));
       var editor = ace.edit(`code${i}`);
-      editor.env.editor.setValue(scriptCode, 1);
+      editor.setTheme("ace/theme/textmate");
       editor.env.editor.setReadOnly(true);
+      editor.renderer.setShowGutter(false);
+      editor.env.editor.setValue(scriptCode, 1);
       $('.case-list').append(`<script type="text/babel">${scriptCode}</script>`);
     });
   }
@@ -441,13 +447,13 @@ new App().init();
 
 /***/ }),
 
-/***/ 199:
+/***/ 200:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(200);
+var content = __webpack_require__(201);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -473,7 +479,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 200:
+/***/ 201:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(54)(undefined);
@@ -481,14 +487,14 @@ exports = module.exports = __webpack_require__(54)(undefined);
 
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  color: #333; }\n\n@font-face {\n  font-family: 'iconfont';\n  /* project id 473307 */\n  src: url(\"//at.alicdn.com/t/font_473307_vexza6i9c0udi.eot\");\n  src: url(\"//at.alicdn.com/t/font_473307_vexza6i9c0udi.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_473307_vexza6i9c0udi.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_473307_vexza6i9c0udi.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_473307_vexza6i9c0udi.svg#iconfont\") format(\"svg\"); }\n\nbody {\n  background: #edf1f5; }\n\nul {\n  display: block;\n  list-style-type: none;\n  -webkit-margin-before: 0;\n  -webkit-margin-after: 0;\n  -webkit-margin-start: 0px;\n  -webkit-margin-end: 0px;\n  -webkit-padding-start: 0; }\n\na {\n  text-decoration: none; }\n\n.header {\n  height: 80px;\n  line-height: 80px;\n  display: block;\n  outline: 0;\n  list-style: none;\n  color: #495060;\n  font-size: 14px;\n  position: relative;\n  background: #fff;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n  .header .left-panel {\n    float: left;\n    padding-left: 10px; }\n    .header .left-panel > a {\n      color: #2d8cf0;\n      font-weight: 900;\n      font-size: 32px; }\n  .header .right-panel {\n    float: right;\n    margin-right: 250px; }\n    .header .right-panel ul li {\n      display: inline-block;\n      margin: 0 50px; }\n\n#main-content {\n  position: relative;\n  height: 100%; }\n  #main-content .left-panel {\n    position: absolute;\n    width: 150px;\n    background: #fff;\n    height: 100%;\n    border-right: 1px solid #ddd;\n    top: 1px;\n    bottom: 0;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n    #main-content .left-panel .nav {\n      margin: 10px 0; }\n      #main-content .left-panel .nav li {\n        padding: 8px 15px;\n        font-size: 16px;\n        cursor: pointer; }\n        #main-content .left-panel .nav li:hover, #main-content .left-panel .nav li.active {\n          background: #edf1f5; }\n          #main-content .left-panel .nav li:hover a, #main-content .left-panel .nav li:hover .iconfont, #main-content .left-panel .nav li.active a, #main-content .left-panel .nav li.active .iconfont {\n            color: #2d8cf0; }\n  #main-content .right-panel {\n    margin-left: 150px;\n    padding: 10px; }\n    #main-content .right-panel .case-type {\n      border-left: 5px solid #2d8cf0;\n      padding: 5px 10px;\n      background: #fff;\n      border-radius: 5px; }\n    #main-content .right-panel .case-list .case-box {\n      margin-top: 5px;\n      border: 1px solid #eee;\n      border-radius: 5px;\n      background: #fff;\n      position: relative;\n      transition: all .2s ease-in-out; }\n      #main-content .right-panel .case-list .case-box .case-demo,\n      #main-content .right-panel .case-list .case-box .case-code {\n        display: inline-block;\n        width: 48%;\n        height: 400px;\n        overflow: hidden;\n        position: relative;\n        padding: 15px;\n        box-sizing: border-box; }\n        #main-content .right-panel .case-list .case-box .case-demo .case-code-detail,\n        #main-content .right-panel .case-list .case-box .case-code .case-code-detail {\n          height: 340px;\n          overflow: scroll; }\n        #main-content .right-panel .case-list .case-box .case-demo .op,\n        #main-content .right-panel .case-list .case-box .case-code .op {\n          position: absolute;\n          bottom: 0;\n          background: #fff;\n          width: 100%;\n          border-top: 1px solid #eee;\n          padding: 5px 0; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a,\n          #main-content .right-panel .case-list .case-box .case-code .op a {\n            cursor: pointer;\n            padding: 2px 15px;\n            background: #edf1f5;\n            display: inline-block; }\n          #main-content .right-panel .case-list .case-box .case-demo .op a:hover,\n          #main-content .right-panel .case-list .case-box .case-code .op a:hover {\n            background: #2d8cf0;\n            color: #fff; }\n      #main-content .right-panel .case-list .case-box .case-split {\n        display: block;\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        left: 48%;\n        border: 1px dashed #eee; }\n      #main-content .right-panel .case-list .case-box:hover {\n        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15); }\n    #main-content .right-panel .case-list .case-box.no-code {\n      padding: 15px; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  color: #333; }\n\nbody {\n  background: #edf1f5; }\n\nul {\n  display: block;\n  list-style-type: none;\n  -webkit-margin-before: 0;\n  -webkit-margin-after: 0;\n  -webkit-margin-start: 0px;\n  -webkit-margin-end: 0px;\n  -webkit-padding-start: 0; }\n\na {\n  text-decoration: none; }\n\n.header {\n  height: 80px;\n  line-height: 80px;\n  display: block;\n  outline: 0;\n  list-style: none;\n  color: #495060;\n  font-size: 14px;\n  position: relative;\n  background: #fff;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n  .header .left-panel {\n    float: left;\n    padding-left: 10px; }\n    .header .left-panel > a {\n      color: #2d8cf0;\n      font-weight: 900;\n      font-size: 32px; }\n  .header .right-panel {\n    float: right;\n    margin-right: 250px; }\n    .header .right-panel ul li.menu {\n      display: inline-block;\n      margin: 0 40px;\n      cursor: pointer;\n      position: relative;\n      padding: 0 10px; }\n      .header .right-panel ul li.menu a:hover {\n        color: #2d8cf0; }\n      .header .right-panel ul li.menu .language-type {\n        position: absolute;\n        left: 0;\n        z-index: 20;\n        background: #fff;\n        display: none;\n        border: 1px solid #eee;\n        border-top: none;\n        box-shadow: 5px 5px 5px #eee; }\n        .header .right-panel ul li.menu .language-type li {\n          width: 120px;\n          height: 40px;\n          line-height: 40px;\n          padding: 0 10px; }\n      .header .right-panel ul li.menu .github {\n        margin: 0 10px; }\n      .header .right-panel ul li.menu .local .local-language {\n        margin: 0 5px;\n        cursor: pointer; }\n      .header .right-panel ul li.menu .local .local-language:hover {\n        color: #2d8cf0; }\n      .header .right-panel ul li.menu:hover {\n        color: #2d8cf0; }\n    .header .right-panel ul .menu.case:hover .language-type {\n      display: block; }\n    .header .right-panel ul .menu.case:hover .icon-down-triangle {\n      display: inline-block;\n      transform: rotate(180deg); }\n\n#main-content {\n  position: relative;\n  height: 100%; }\n  #main-content .left-panel {\n    position: absolute;\n    width: 150px;\n    background: #fff;\n    height: 100%;\n    border-right: 1px solid #ddd;\n    top: 1px;\n    bottom: 0;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }\n    #main-content .left-panel .nav {\n      margin: 10px 0; }\n      #main-content .left-panel .nav li {\n        padding: 8px 15px;\n        font-size: 16px;\n        cursor: pointer; }\n        #main-content .left-panel .nav li:hover, #main-content .left-panel .nav li.active {\n          background: #edf1f5; }\n          #main-content .left-panel .nav li:hover a, #main-content .left-panel .nav li:hover .iconfont, #main-content .left-panel .nav li.active a, #main-content .left-panel .nav li.active .iconfont {\n            color: #2d8cf0; }\n  #main-content .right-panel {\n    margin-left: 150px;\n    padding: 10px; }\n    #main-content .right-panel .case-type {\n      border-left: 5px solid #2d8cf0;\n      padding: 5px 10px;\n      background: #fff;\n      border-radius: 5px; }\n    #main-content .right-panel .case-list .case-box {\n      margin-top: 5px;\n      border: 1px solid #eee;\n      border-radius: 5px;\n      background: #fff;\n      position: relative;\n      transition: all .2s ease-in-out; }\n      #main-content .right-panel .case-list .case-box .index-bg {\n        position: absolute;\n        left: 0;\n        top: 0;\n        width: 0;\n        height: 0;\n        border-top: 80px solid #2d8cf0;\n        border-right: 80px solid transparent; }\n      #main-content .right-panel .case-list .case-box .index {\n        position: absolute;\n        left: 0;\n        top: 0;\n        padding: 10px 20px;\n        font-size: 26px;\n        color: #fff; }\n    #main-content .right-panel .case-list .case-demo,\n    #main-content .right-panel .case-list .case-code {\n      display: inline-block;\n      width: 48%;\n      height: 400px;\n      overflow: hidden;\n      position: relative;\n      padding: 15px;\n      box-sizing: border-box; }\n      #main-content .right-panel .case-list .case-demo .case-code-detail,\n      #main-content .right-panel .case-list .case-code .case-code-detail {\n        height: 340px;\n        width: 100%;\n        overflow-y: auto;\n        position: relative; }\n        #main-content .right-panel .case-list .case-demo .case-code-detail pre,\n        #main-content .right-panel .case-list .case-code .case-code-detail pre {\n          position: absolute;\n          top: 0;\n          right: 0;\n          bottom: 0;\n          left: 0; }\n      #main-content .right-panel .case-list .case-demo .op,\n      #main-content .right-panel .case-list .case-code .op {\n        position: absolute;\n        bottom: 0;\n        background: #fff;\n        width: 100%;\n        border-top: 1px solid #eee;\n        padding: 5px 0; }\n        #main-content .right-panel .case-list .case-demo .op a,\n        #main-content .right-panel .case-list .case-code .op a {\n          cursor: pointer;\n          padding: 2px 15px;\n          background: #edf1f5;\n          display: inline-block; }\n        #main-content .right-panel .case-list .case-demo .op a:hover,\n        #main-content .right-panel .case-list .case-code .op a:hover {\n          background: #2d8cf0;\n          color: #fff; }\n          #main-content .right-panel .case-list .case-demo .op a:hover i,\n          #main-content .right-panel .case-list .case-code .op a:hover i {\n            color: #fff; }\n    #main-content .right-panel .case-list .case-split {\n      display: block;\n      position: absolute;\n      top: 0;\n      bottom: 0;\n      left: 48%;\n      border: 1px dashed #eee; }\n    #main-content .right-panel .case-list:hover {\n      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15); }\n    #main-content .right-panel .case-box.no-code {\n      padding: 15px; }\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 201:
+/***/ 202:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10749,7 +10755,7 @@ return jQuery;
 
 /***/ }),
 
-/***/ 202:
+/***/ 203:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10768,7 +10774,7 @@ const URL = {
 
 /***/ }),
 
-/***/ 203:
+/***/ 204:
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -10797,7 +10803,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 204:
+/***/ 205:
 /***/ (function(module, exports, __webpack_require__) {
 
 var Handlebars = __webpack_require__(41);
@@ -10806,7 +10812,7 @@ module.exports = (Handlebars["default"] || Handlebars).template({"1":function(co
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "  <li class=\""
-    + ((stack1 = __default(__webpack_require__(220)).call(depth0 != null ? depth0 : (container.nullContext || {}),(depths[1] != null ? depths[1].chartType : depths[1]),(data && data.key),{"name":"active","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = __default(__webpack_require__(221)).call(depth0 != null ? depth0 : (container.nullContext || {}),(depths[1] != null ? depths[1].chartType : depths[1]),(data && data.key),{"name":"active","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\">\n    <a href=\"/demo.html?type="
     + alias2(alias1((data && data.key), depth0))
     + "&language="
@@ -10826,7 +10832,7 @@ module.exports = (Handlebars["default"] || Handlebars).template({"1":function(co
 
 /***/ }),
 
-/***/ 205:
+/***/ 206:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10841,14 +10847,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var _handlebarsBase = __webpack_require__(120);
+var _handlebarsBase = __webpack_require__(121);
 
 var base = _interopRequireWildcard(_handlebarsBase);
 
 // Each of these augment the Handlebars object. No need to setup here.
 // (This is done to easily share code between commonjs and browse envs)
 
-var _handlebarsSafeString = __webpack_require__(217);
+var _handlebarsSafeString = __webpack_require__(218);
 
 var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
@@ -10860,11 +10866,11 @@ var _handlebarsUtils = __webpack_require__(24);
 
 var Utils = _interopRequireWildcard(_handlebarsUtils);
 
-var _handlebarsRuntime = __webpack_require__(218);
+var _handlebarsRuntime = __webpack_require__(219);
 
 var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-var _handlebarsNoConflict = __webpack_require__(219);
+var _handlebarsNoConflict = __webpack_require__(220);
 
 var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
@@ -10900,7 +10906,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 206:
+/***/ 207:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10912,31 +10918,31 @@ exports.registerDefaultHelpers = registerDefaultHelpers;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _helpersBlockHelperMissing = __webpack_require__(207);
+var _helpersBlockHelperMissing = __webpack_require__(208);
 
 var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 
-var _helpersEach = __webpack_require__(208);
+var _helpersEach = __webpack_require__(209);
 
 var _helpersEach2 = _interopRequireDefault(_helpersEach);
 
-var _helpersHelperMissing = __webpack_require__(209);
+var _helpersHelperMissing = __webpack_require__(210);
 
 var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 
-var _helpersIf = __webpack_require__(210);
+var _helpersIf = __webpack_require__(211);
 
 var _helpersIf2 = _interopRequireDefault(_helpersIf);
 
-var _helpersLog = __webpack_require__(211);
+var _helpersLog = __webpack_require__(212);
 
 var _helpersLog2 = _interopRequireDefault(_helpersLog);
 
-var _helpersLookup = __webpack_require__(212);
+var _helpersLookup = __webpack_require__(213);
 
 var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 
-var _helpersWith = __webpack_require__(213);
+var _helpersWith = __webpack_require__(214);
 
 var _helpersWith2 = _interopRequireDefault(_helpersWith);
 
@@ -10954,7 +10960,7 @@ function registerDefaultHelpers(instance) {
 
 /***/ }),
 
-/***/ 207:
+/***/ 208:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11001,7 +11007,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 208:
+/***/ 209:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11103,7 +11109,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 209:
+/***/ 210:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11136,7 +11142,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 210:
+/***/ 211:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11173,7 +11179,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 211:
+/***/ 212:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11207,7 +11213,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 212:
+/***/ 213:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11227,7 +11233,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 213:
+/***/ 214:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11268,7 +11274,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 214:
+/***/ 215:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11280,7 +11286,7 @@ exports.registerDefaultDecorators = registerDefaultDecorators;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _decoratorsInline = __webpack_require__(215);
+var _decoratorsInline = __webpack_require__(216);
 
 var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 
@@ -11292,7 +11298,7 @@ function registerDefaultDecorators(instance) {
 
 /***/ }),
 
-/***/ 215:
+/***/ 216:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11329,7 +11335,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 216:
+/***/ 217:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11384,7 +11390,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 217:
+/***/ 218:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11407,7 +11413,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 218:
+/***/ 219:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11436,7 +11442,7 @@ var _exception = __webpack_require__(42);
 
 var _exception2 = _interopRequireDefault(_exception);
 
-var _base = __webpack_require__(120);
+var _base = __webpack_require__(121);
 
 function checkRevision(compilerInfo) {
   var compilerRevision = compilerInfo && compilerInfo[0] || 1,
@@ -11722,7 +11728,7 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
 
 /***/ }),
 
-/***/ 219:
+/***/ 220:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11751,7 +11757,7 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ 220:
+/***/ 221:
 /***/ (function(module, exports) {
 
 module.exports = function (a, b) {
@@ -11761,7 +11767,7 @@ module.exports = function (a, b) {
 
 /***/ }),
 
-/***/ 221:
+/***/ 222:
 /***/ (function(module, exports, __webpack_require__) {
 
 var Handlebars = __webpack_require__(41);
@@ -11780,40 +11786,25 @@ module.exports = (Handlebars["default"] || Handlebars).template({"1":function(co
 
 /***/ }),
 
-/***/ 222:
-/***/ (function(module, exports, __webpack_require__) {
-
-var Handlebars = __webpack_require__(41);
-function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-  return "\n<div class=\"case-box\">\n  <div class=\"case-demo\">\n    <div id=\"example"
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
-    + "\"></div>\n  </div>\n  <div class=\"case-split\"></div>\n  <div class=\"case-code\">\n    <pre class=\"case-code-detail\" id=\"code"
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
-    + "\"></pre>\n    <div class=\"op\">\n      <a class=\"run\" data-index=\""
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
-    + "\">试一试</a>\n      <a>复制</a>\n    </div>\n  </div>\n</div>\n";
-},"useData":true});
-
-/***/ }),
-
 /***/ 223:
 /***/ (function(module, exports, __webpack_require__) {
 
 var Handlebars = __webpack_require__(41);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    return "";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "<div class=\"case-box\">\n  <div class=\"case-demo\">\n    "
-    + ((stack1 = ((helper = (helper = helpers.tpl || (depth0 != null ? depth0.tpl : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"tpl","hash":{},"data":data}) : helper))) != null ? stack1 : "")
-    + "\n  </div>\n  <div class=\"case-split\"></div>\n  <div class=\"case-code\">\n    <pre class=\"case-code-detail\" id=\"code"
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
+  return "\n<div class=\"case-box\">\n  <div class=\"index-bg\">\n  </div>\n  <div class=\"index\">\n    "
+    + ((stack1 = __default(__webpack_require__(77)).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.i : depth0),1,{"name":"add","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n  </div>\n  <div class=\"case-demo\">\n    <div id=\"example"
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
+    + "\"></div>\n  </div>\n  <div class=\"case-split\"></div>\n  <div class=\"case-code\">\n    <pre class=\"case-code-detail\" id=\"code"
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
     + "\"></pre>\n    <div class=\"op\">\n      <a class=\"run\" data-index=\""
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
-    + "\">试一试</a>\n      <a>复制</a>\n    </div>\n  </div>\n</div>\n";
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
+    + "\">\n        <i class=\"iconfont icon-yunxing\"></i>\n        试一试\n      </a>\n    </div>\n  </div>\n</div>\n";
 },"useData":true});
 
 /***/ }),
@@ -11823,18 +11814,20 @@ module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,"
 
 var Handlebars = __webpack_require__(41);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    return "";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "<div class=\"case-box\" id=\"caseBox"
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
-    + "\">\n  <div class=\"case-demo\">\n    <div id=\"example"
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
-    + "\"></div>\n  </div>\n  <div class=\"case-split\"></div>\n  <div class=\"case-code\">\n    <pre class=\"case-code-detail\" id=\"code"
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
+  return "<div class=\"case-box\">\n  <div class=\"index-bg\">\n  </div>\n  <div class=\"index\">\n    "
+    + ((stack1 = __default(__webpack_require__(77)).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.i : depth0),1,{"name":"add","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n  </div>\n  <div class=\"case-demo\">\n    "
+    + ((stack1 = alias1((depth0 != null ? depth0.tpl : depth0), depth0)) != null ? stack1 : "")
+    + "\n  </div>\n  <div class=\"case-split\"></div>\n  <div class=\"case-code\">\n    <pre class=\"case-code-detail\" id=\"code"
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
     + "\"></pre>\n    <div class=\"op\">\n      <a class=\"run\" data-index=\""
-    + alias4(((helper = (helper = helpers.i || (depth0 != null ? depth0.i : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"i","hash":{},"data":data}) : helper)))
-    + "\">试一试</a>\n      <a>复制</a>\n    </div>\n  </div>\n</div>\n";
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
+    + "\">\n        <i class=\"iconfont icon-yunxing\"></i>\n        试一试\n      </a>\n    </div>\n  </div>\n</div>\n";
 },"useData":true});
 
 /***/ }),
@@ -11842,10 +11835,35 @@ module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,"
 /***/ 225:
 /***/ (function(module, exports, __webpack_require__) {
 
+var Handlebars = __webpack_require__(41);
+function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    return "";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "<div class=\"case-box\" id=\"caseBox"
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
+    + "\">\n  <div class=\"index-bg\">\n  </div>\n  <div class=\"index\">\n    "
+    + ((stack1 = __default(__webpack_require__(77)).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.i : depth0),1,{"name":"add","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n  </div>\n  <div class=\"case-demo\">\n    <div id=\"example"
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
+    + "\"></div>\n  </div>\n  <div class=\"case-split\"></div>\n  <div class=\"case-code\">\n    <div class=\"case-code-detail\">\n      <pre id=\"code"
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
+    + "\"></pre>\n    </div>\n    <div class=\"op\">\n      <a class=\"run\" data-index=\""
+    + alias2(alias1((depth0 != null ? depth0.i : depth0), depth0))
+    + "\">\n        <i class=\"iconfont icon-yunxing\"></i>\n        试一试\n      </a>\n    </div>\n  </div>\n</div>\n";
+},"useData":true});
+
+/***/ }),
+
+/***/ 226:
+/***/ (function(module, exports, __webpack_require__) {
+
 var map = {
-	"./line/example1/jsonCode.js": 226,
-	"./line/example1/reactCode.js": 227,
-	"./line/example1/vueCode.js": 228
+	"./line/example1/jsonCode.js": 227,
+	"./line/example1/reactCode.js": 228,
+	"./line/example1/vueCode.js": 229
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -11861,11 +11879,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 225;
+webpackContext.id = 226;
 
 /***/ }),
 
-/***/ 226:
+/***/ 227:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11977,7 +11995,7 @@ const config = {
 
 /***/ }),
 
-/***/ 227:
+/***/ 228:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12081,7 +12099,7 @@ const template = `
 
 /***/ }),
 
-/***/ 228:
+/***/ 229:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12282,7 +12300,7 @@ function appendContextPath(contextPath, id) {
 
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
-module.exports = __webpack_require__(205)['default'];
+module.exports = __webpack_require__(206)['default'];
 
 
 /***/ }),
@@ -12912,6 +12930,16 @@ try {
 // easier to handle this case. if(!global) { ...}
 
 module.exports = g;
+
+
+/***/ }),
+
+/***/ 77:
+/***/ (function(module, exports) {
+
+module.exports = function (a, b) {
+  return a + b;
+}
 
 
 /***/ })
