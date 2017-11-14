@@ -1,15 +1,14 @@
+
 <div class="case-box">
   <div class="case-demo">
-    <div id="example1"></div>
+    <div id="example{{i}}"></div>
   </div>
   <div class="case-split"></div>
   <div class="case-code">
-    <div>
-
-    </div>
+    <pre class="case-code-detail" id="code{{i}}"></pre>
     <div class="op">
-      <a>运行</a>
-      <a id="run">复制</a>
+      <a class="run" data-index="{{i}}">试一试</a>
+      <a>复制</a>
     </div>
   </div>
 </div>

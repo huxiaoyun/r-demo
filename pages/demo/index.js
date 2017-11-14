@@ -1,54 +1,65 @@
 
 require('./index.scss');
 const $ = require('jquery');
-// const handlebars = require('handlebars');
+
+const CONS = require('../constants');
+
 const codeConfig = require('../../examples/index');
 
-// const caseBoxTpl = require('./caseBox.tpl');
+const navTpl = require('./tpl/nav.tpl');
+const rightPanelTpl = require('./tpl/rightPanel.tpl');
+const caseBoxJsonTpl = require('./tpl/caseBoxJson.tpl');
+const caseBoxVueTpl = require('./tpl/caseBoxVue.tpl');
+const caseBoxReactTpl = require('./tpl/caseBoxReact.tpl');
 
 class App {
   constructor() {
     this.attrs = {
       codes: [],
       language: 'json',
+      chartType: 'line',
     };
   }
   init() {
     // 根据 url 路由转发
     const langReg = new RegExp('(^|&)language=([^&]*)(&|$)');
+    const typeReg = new RegExp('(^|&)type=([^&]*)(&|$)');
     const search = window.location.search.substr(1);
 
     const langResult = search.match(langReg);
+    const typeResult = search.match(typeReg);
     const lang = langResult ? langResult[2] : 'json';
+    const chartType = typeResult? typeResult[2] : Object.keys(codeConfig)[0];
     this.attrs.language = lang;
-    Object.keys(codeConfig).forEach((chartType) => {
-      const exampleFolders = codeConfig[chartType].examples || [];
-      exampleFolders.forEach((folder) => {
-        const code = require(`../../examples/${chartType}/${folder}/${lang}Code.js`);
-        this.attrs.codes.push(code);
-      });
+    this.attrs.chartType = chartType;
+    const exampleFolders = codeConfig[chartType].examples || [];
+    exampleFolders.forEach((folder) => {
+      const code = require(`../../examples/${chartType}/${folder}/${lang}Code.js`);
+      this.attrs.codes.push(code);
     });
-    this.renderExample();
 
+
+    this.render();
+  }
+  render() {
     this.renderNav();
+    this.renderRightPanel();
+
+    this.renderExample();
     this.bindEvent();
   }
 
   renderNav() {
-    const language = this.attrs.language;
-    let navTpl = '';
+    $('#nav').append(navTpl({
+      codeConfig,
+      language: this.attrs.language,
+      chartType: this.attrs.chartType,
+    }));
+  }
 
-    Object.keys(codeConfig).forEach((chartType) => {
-      const cnName= codeConfig[chartType].cnName || '';
-      const icon = codeConfig[chartType].icon || '';
-      navTpl += `<li>
-        <a href="/demo.html?type=${chartType}&language=${language}">
-          <i class="iconfont icon-${icon}"></i>
-          ${cnName}
-        </a>
-      </li>`;
-    });
-    $('#nav').append(navTpl);
+  renderRightPanel() {
+    const cnName = codeConfig[this.attrs.chartType].cnName;
+    $('#rightPanel').append(rightPanelTpl({cnName, noCodes: this.attrs.codes.length ? false : true}));
   }
 
   bindEvent() {
@@ -89,82 +100,16 @@ class App {
         return this.getJsfiddleJsonData(index);
       case 'react':
         return this.getJsfiddleReactData(index);
-      case 'rax':
-        return;
       case 'vue':
       return this.getJsfiddleVueData(index);
       case 'angular':
         return;
+      case 'rax':
+        // todo
+        return;
       default:
         return;
     }
-  }
-
-  getJsfiddleReactData(index) {
-    const code = this.attrs.codes[index];
-    const data = {
-      js: `var config = ${code.config};
-          ${code.script}
-          ReactDOM.render(${code.template},
-          document.getElementById('example'));
-        `,
-        html: `<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js"></script>
-
-        <script src="https://huxiaoyun.github.io/r-demo/lib/rechart-core.js"></script>
-        <script src="https://huxiaoyun.github.io/r-demo/lib/rechart-react.js"></script>
-
-        <div id="example"></div>`,
-        panel_css: 1,
-        panel_js: 3
-    };
-
-    return data;
-  }
-
-  getJsfiddleJsonData(index) {
-    const code = this.attrs.codes[index];
-    const config = JSON.stringify(code.config, null, 2);
-    const data = {
-      js: `var config = ${config};
-          config.chart.container = 'example';
-          RechartCore.ChartBuilder(config);
-        `,
-      html: `<script src="https://huxiaoyun.github.io/r-demo/lib/rechart-core.js"></script><div id="example"></div>`,
-      panel_css: 1,
-      panel_js: 3
-    };
-    return data;
-  }
-
-  getJsfiddleVueData(index) {
-    const code = this.attrs.codes[index];
-    const config = JSON.stringify(code.config, null, 2);
-    const data = {
-      js: `var config = ${code.config};
-new Vue({
-  el: '#example',
-  data: {
-    config,
-  },
-});
-        `,
-      html: `
-<script src="https://huxiaoyun.github.io/r-demo/lib/vue.min.js"></script>
-<script src="https://huxiaoyun.github.io/r-demo/lib/rechart-vue.js"></script>
-<div id="example">
-  <v-chart :width="500" :height="400" :data="config.data" :data-pre="config.dataPre" :data-def="config.dataDef">
-    <v-smooth-line :size="2" />
-    <v-point :size="4" :v-style="{stroke: '#fff', lineWidth: 1}" />
-    <v-tooltip :crosshairs="{type: 'line'}" />
-    <v-legend />
-    <v-axis data-key="temperature"/>
-  </v-chart>
-</div>`,
-      panel_css: 1,
-      panel_js: 3
-    };
-    return data;
   }
 
   renderExample() {
@@ -189,104 +134,122 @@ new Vue({
   }
 
   renderJson() {
-    this.attrs.codes.forEach((code, index) => {
+    if (!this.attrs.codes.length) {
+      return;
+    }
+    $('.case-list').empty();
+    this.attrs.codes.forEach((code, i) => {
+      $('.case-list').append(caseBoxJsonTpl({i}));
+      var editor = ace.edit(`code${i}`);
       const str = JSON.stringify(code.config, null, 2);
-      const tpl = `<div class="case-box">
-        <div class="case-demo">
-          <div id="example${index}"></div>
-        </div>
-        <div class="case-split"></div>
-        <div class="case-code">
-          <pre class="case-code-detail" id="code${index}"></pre>
-          <div class="op">
-            <a class="run" data-index="${index}">试一试</a>
-            <a>复制</a>
-          </div>
-        </div>
-      </div>`;
-      $('.case-list').append(tpl);
-      var editor = ace.edit(`code${index}`);
       editor.env.editor.setValue(str, 1);
       editor.env.editor.setReadOnly(true);
 
-      code.config.chart.container = `example${index}`;
+      code.config.chart.container = `example${i}`;
       RechartCore.ChartBuilder(code.config);
     });
   }
+  getJsfiddleJsonData(index) {
+    const code = this.attrs.codes[index];
+    const config = JSON.stringify(code.config, null, 2);
+    const data = {
+      js: `var config = ${config};
+RechartCore.ChartBuilder(config);
+      `,
+      html: `<script src="${CONS.URL.rechartCore}"></script>
+<div id="example${index}"></div>`,
+      panel_css: 1,
+      panel_js: 3
+    };
+    return data;
+  }
+
 
   renderVue() {
-    this.attrs.codes.forEach((code, index) => {
-      const vueTpl = `
-<div id="example${index}">
-  <v-chart :width="500" :height="400" :data="config.data" :data-pre="config.dataPre" :data-def="config.dataDef">
-    <v-smooth-line :size="2" />
-    <v-point :size="4" :v-style="{stroke: '#fff', lineWidth: 1}" />
-    <v-tooltip :crosshairs="{type: 'line'}" />
-    <v-legend />
-    <v-axis data-key="temperature" />
-  </v-chart>
-</div>`;
+    if (!this.attrs.codes.length) {
+      return;
+    }
+    $('.case-list').empty();
+    this.attrs.codes.forEach((code, i) => {
+      const vueTpl = `<div id="example${i}">${code.tpl}</div>`;
       const scriptCode = `
 var config = ${code.config}
 new Vue({
-  el: '#example${index}',
+  el: '#example${i}',
   data: {
     config,
   }
 });
 `;
-      const showCode = `
-${vueTpl}
 
-${scriptCode}
-`;
-      const runCode = `<script type="text/javascript">${scriptCode}</script>`;
-      const tpl = `<div class="case-box">
-        <div class="case-demo">
-          ${vueTpl}
-        </div>
-        <div class="case-split"></div>
-        <div class="case-code">
-          <pre class="case-code-detail" id="code${index}"></pre>
-          <div class="op">
-            <a class="run" data-index="${index}">试一试</a>
-            <a>复制</a>
-          </div>
-        </div>
-      </div>`;
-      $('.case-list').append(tpl);
-      var editor = ace.edit(`code${index}`);
+      $('.case-list').append(caseBoxVueTpl({ tpl: vueTpl, i }));
+      var editor = ace.edit(`code${i}`);
+      const showCode = `${vueTpl}${scriptCode}`;
       editor.env.editor.setValue(showCode, 1);
       editor.env.editor.setReadOnly(true);
-      $('.case-list').append(runCode);
+      $('.case-list').append(`<script type="text/javascript">${scriptCode}</script>`);
     });
   }
 
-  renderReact() {
-    this.attrs.codes.forEach((code, index) => {
-      const scriptCode = `var config = ${code.config};
-${code.script}
-ReactDOM.render(${code.template}, document.getElementById('example${index}'))`;
+  getJsfiddleVueData(index) {
+    const code = this.attrs.codes[index];
+    const config = JSON.stringify(code.config, null, 2);
+    const data = {
+      js: `var config = ${code.config};
+new Vue({
+  el: '#example',
+  data: {
+    config,
+  },
+});
+        `,
+      html: `
+<script src="${CONS.URL.vue}"></script>
+<script src="${CONS.URL.rechartVue}"></script>
+<div id="example">${code.tpl}</div>`,
+      panel_css: 1,
+      panel_js: 3
+    };
+    return data;
+  }
 
-      const tpl = `<div class="case-box" id="caseBox${index}">
-        <div class="case-demo">
-          <div id="example${index}"></div>
-        </div>
-        <div class="case-split"></div>
-        <div class="case-code">
-          <pre class="case-code-detail" id="code${index}"></pre>
-          <div class="op">
-            <a class="run" data-index="${index}">试一试</a>
-            <a>复制</a>
-          </div>
-        </div>
-      </div>`;
-      $('.case-list').append(tpl);
-      var editor = ace.edit(`code${index}`);
+  renderReact() {
+    if (!this.attrs.codes.length) {
+      return;
+    }
+    $('.case-list').empty();
+    this.attrs.codes.forEach((code, i) => {
+      const scriptCode = `
+var config = ${code.config};
+${code.script}
+ReactDOM.render(${code.template}, document.getElementById('example${i}'))`;
+
+      $('.case-list').append(caseBoxReactTpl({ i }));
+      var editor = ace.edit(`code${i}`);
       editor.env.editor.setValue(scriptCode, 1);
       editor.env.editor.setReadOnly(true);
       $('.case-list').append(`<script type="text/babel">${scriptCode}</script>`);
     });
+  }
+
+
+  getJsfiddleReactData(i) {
+    const code = this.attrs.codes[i];
+    const data = {
+      js: `
+var config = ${code.config};
+${code.script}
+ReactDOM.render(${code.template},document.getElementById('example${i}'));`,
+      html: `<script src="${CONS.URL.react}"></script>
+<script src="${CONS.URL.reactDom}"></script>
+<script src="${CONS.URL.rechartCore}"></script>
+<script src="${CONS.URL.rechartReact}"></script>
+<div id="example${i}"></div>`,
+      panel_css: 1,
+      panel_js: 3
+    };
+
+    return data;
   }
 }
 
