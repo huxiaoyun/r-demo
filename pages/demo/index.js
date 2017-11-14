@@ -141,9 +141,11 @@ class App {
     this.attrs.codes.forEach((code, i) => {
       $('.case-list').append(caseBoxJsonTpl({i}));
       var editor = ace.edit(`code${i}`);
-      const str = JSON.stringify(code.config, null, 2);
-      editor.env.editor.setValue(str, 1);
+      const showCode = JSON.stringify(code.config, null, 2);
+      editor.setTheme("ace/theme/textmate");
       editor.env.editor.setReadOnly(true);
+      editor.renderer.setShowGutter(false);
+      editor.env.editor.setValue(showCode, 1);
 
       code.config.chart.container = `example${i}`;
       RechartCore.ChartBuilder(code.config);
@@ -185,8 +187,10 @@ new Vue({
       $('.case-list').append(caseBoxVueTpl({ tpl: vueTpl, i }));
       var editor = ace.edit(`code${i}`);
       const showCode = `${vueTpl}${scriptCode}`;
-      editor.env.editor.setValue(showCode, 1);
+      editor.setTheme("ace/theme/textmate");
       editor.env.editor.setReadOnly(true);
+      editor.renderer.setShowGutter(false);
+      editor.env.editor.setValue(showCode, 1);
       $('.case-list').append(`<script type="text/javascript">${scriptCode}</script>`);
     });
   }
@@ -226,8 +230,10 @@ ReactDOM.render(${code.template}, document.getElementById('example${i}'))`;
 
       $('.case-list').append(caseBoxReactTpl({ i }));
       var editor = ace.edit(`code${i}`);
-      editor.env.editor.setValue(scriptCode, 1);
+      editor.setTheme("ace/theme/textmate");
       editor.env.editor.setReadOnly(true);
+      editor.renderer.setShowGutter(false);
+      editor.env.editor.setValue(scriptCode, 1);
       $('.case-list').append(`<script type="text/babel">${scriptCode}</script>`);
     });
   }

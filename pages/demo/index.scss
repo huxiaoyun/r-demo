@@ -3,14 +3,6 @@
   padding: 0;
   color: #333;
 }
-@font-face {
-  font-family: 'iconfont';  /* project id 473307 */
-  src: url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.eot');
-  src: url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_473307_vexza6i9c0udi.svg#iconfont') format('svg');
-}
 body {
   background: #edf1f5;
 }
@@ -50,9 +42,55 @@ a {
     float: right;
     margin-right: 250px;
     ul {
-      li {
+      li.menu {
         display: inline-block;
-        margin: 0 50px;
+        margin: 0 40px;
+        cursor: pointer;
+        position: relative;
+        padding: 0 10px;
+        a:hover {
+          color: #2d8cf0;
+        }
+        .language-type {
+          position: absolute;
+          left: 0;
+          z-index: 20;
+          background: #fff;
+          display: none;
+          border: 1px solid #eee;
+          border-top: none;
+          box-shadow: 5px 5px 5px #eee;
+          li {
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 10px;
+          }
+        }
+        .github {
+          margin: 0 10px;
+        }
+        .local {
+          .local-language {
+            margin: 0 5px;
+            cursor: pointer;
+          }
+          .local-language:hover {
+            color: #2d8cf0;
+          }
+        }
+        &:hover {
+          color: #2d8cf0;
+        }
+      }
+      .menu.case:hover {
+        .language-type {
+          display: block;
+        }
+        .icon-down-triangle {
+          display: inline-block;
+          transform: rotate(180deg);
+        }
       }
     }
   }
@@ -103,6 +141,24 @@ a {
         background: #fff;
         position: relative;
         transition: all .2s ease-in-out;
+        .index-bg {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 0;
+          height: 0;
+          border-top: 80px solid #2d8cf0;
+          border-right: 80px solid transparent;
+        }
+        .index {
+          position: absolute;
+          left: 0;
+          top: 0;
+          padding: 10px 20px;
+          font-size: 26px;
+          color: #fff;
+        }
+      }
         .case-demo,
         .case-code {
           display: inline-block;
@@ -114,7 +170,16 @@ a {
           box-sizing: border-box;
           .case-code-detail {
             height: 340px;
-            overflow: scroll;
+            width: 100%;
+            overflow-y: auto;
+            position: relative;
+            pre {
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+            }
           }
           .op {
             position: absolute;
@@ -132,6 +197,9 @@ a {
             a:hover {
               background: #2d8cf0;
               color: #fff;
+              i {
+                color: #fff;
+              }
             }
           }
         }
@@ -146,10 +214,9 @@ a {
         &:hover {
           box-shadow: 5px 5px 10px rgba(0,0,0,0.15);
         }
-      }
-      .case-box.no-code {
-        padding: 15px;
-      }
+    }
+    .case-box.no-code {
+      padding: 15px;
     }
   }
 }
