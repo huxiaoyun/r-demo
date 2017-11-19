@@ -9,7 +9,12 @@
   <body>
     <header class="home-header">
       <h1 class="home-title">Viser</h1>
+      <h1 class="home-subtitle">╰(*°▽°*)╯</h1>
       <nav class="home-nav">
+        <a class="github-link" href="https://github.com/viserjs/viser" target="_blank">
+          <i class="iconfont icon-github"></i>
+          <i class="iconfont icon-github-o"></i>
+        </a>
         <a class="home-nav-item demo-link" href="/demo.html">案例</a>
         <a class="home-nav-item api-link" href="/api.html">文档</a>
       </nav>
@@ -17,21 +22,34 @@
     <section class="main-intro">
       <p class="main-intro-title">再一次看见</p>
       <p class="main-intro-title">你的数据。</p>
-      <p class="main-intro-subtitle">使用 Viser 行进可视化处理，让你的数据变得更加直观。</p>
+      <p class="main-intro-subtitle">使用 Viser 进行可视化处理，让你的数据变得更加直观。</p>
+      <a class="try-link" href="/api.html#/guide/installation">立即使用</a>
     </section>
     <section class="highlight-feature">
       <h3 class="intro-title">亮点功能</h3>
       <ul class="highlight-feature-list">
         <li class="highlight-feature-item">
-          <div class="highlight-feature-title"></div>
+          <div class="highlight-feature-title">
+            <div class="icon-container">
+              <i class="iconfont icon-contain"></i>
+            </div>
+          </div>
           <div class="highlight-feature-content">几乎可以兼容<br/>所有主流前端框架</div>
         </li>
         <li class="highlight-feature-item">
-          <div class="highlight-feature-title"></div>
+          <div class="highlight-feature-title">
+            <div class="icon-container">
+              <i class="iconfont icon-infinite"></i>
+            </div>
+          </div>
           <div class="highlight-feature-content">微小的变动<br/>就可以带来无限可能</div>
         </li>
         <li class="highlight-feature-item">
-          <div class="highlight-feature-title"></div>
+          <div class="highlight-feature-title">
+            <div class="icon-container">
+              <i class="iconfont icon-one"></i>
+            </div>
+          </div>
           <div class="highlight-feature-content">用一个图表库<br/>满足你的可视化需求</div>
         </li>
       </ul>
@@ -39,7 +57,9 @@
     <section class="home-section presentation-1">
       <div class="intro-container">
         <div class="intro-multimedia">
-
+          <div class="presentation-item">
+            <div id="viser-mount-1"></div>
+          </div>
         </div>
         <div class="intro-text">
           <h3 class="intro-title">即刻创建图表</h3>
@@ -50,7 +70,18 @@
     <section class="home-section presentation-2">
       <div class="intro-container">
         <div class="intro-multimedia">
-
+          <div class="presentation-item presentation-item-1">
+            <div id="viser-mount-2-1"></div>
+          </div>
+          <div class="presentation-item presentation-item-2">
+            <div id="viser-mount-2-2"></div>
+          </div>
+          <div class="presentation-item presentation-item-3">
+            <div id="viser-mount-2-3"></div>
+          </div>
+          <div class="presentation-item presentation-item-4">
+            <div id="viser-mount-2-4"></div>
+          </div>
         </div>
         <div class="intro-text">
           <h3 class="intro-title">纠结？不存在的</h3>
@@ -61,10 +92,22 @@
     <section class="home-section presentation-3">
       <div class="intro-container">
         <div class="intro-multimedia">
+          <div class="presentation-item presentation-react">
+            <img src="//img.alicdn.com/tfs/TB1tvbdbyqAXuNjy1XdXXaYcVXa-400-400.png" />
+          </div>
+          <div class="presentation-item presentation-ng">
+            <img src="//img.alicdn.com/tfs/TB1tLbdbyqAXuNjy1XdXXaYcVXa-400-400.png" />
+          </div>
+          <div class="presentation-item presentation-vue">
+            <img src="//img.alicdn.com/tfs/TB1s2bdbyqAXuNjy1XdXXaYcVXa-400-400.png" />
+          </div>
+          <div class="presentation-item presentation-json">
+            <img src="//img.alicdn.com/tfs/TB1sLbdbyqAXuNjy1XdXXaYcVXa-400-400.jpg" />
+          </div>
         </div>
         <div class="intro-text">
           <h3 class="intro-title">告别框架烦恼</h3>
-          <p class="intro-content">做可视化就是一件纯粹的事情，选择什么前端框架并不是需要真正关心的事情。不管是React，还是Angular，抑或是Vue，你都能在Viser里找到适合你的解决方案。你的框架比较小众？我们也支持JSON格式啊，就是这么贴心。</p>
+          <p class="intro-content">做可视化就是一件纯粹的事情，选择什么前端框架并不是需要真正关心的事情。不管是React，还是Angular，抑或是Vue，你都能在Viser里找到解决方案。你的框架比较小众？我们也支持JSON格式啊，就是这么贴心。</p>
         </div>
       </div>
     </section>
@@ -77,5 +120,7 @@
       Released under the MIT License.<br />
       Copyright (c) 2017 Viser Group. All Rights Reserved.<br />
     </footer>
+    <script src="./lib/rechart-core.js" type="text/javascript"></script>
+    <script src="./lib/home.js" type="text/javascript"></script>
   </body>
 </html>
