@@ -2,21 +2,6 @@
 @import '../styles/common.scss';
 @import '../styles/icon.scss';
 @import '../styles/main.scss';
+@import '../styles/nav.scss';
 
-.api-container {
-  padding: 20px;
-}
-
-.api-nav {
-  padding-left: 30px;
-  .api-nav-folder {
-    margin-bottom: 10px;
-    .api-nav-title {
-      color: #999;
-    }
-    .api-nav-link {
-      color: #666;
-      line-height: 34px;
-    }
-  }
-}
+@import './markdown.scss';

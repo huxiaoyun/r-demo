@@ -31,12 +31,12 @@
       height: 36px;
       width: 110px;
       float: left;
-      background: url('//img.alicdn.com/tfs/TB1TRQAbyqAXuNjy1XdXXaYcVXa-282-96.png');
+      background: url('//img.alicdn.com/tfs/TB1HxTId4rI8KJjy0FpXXb5hVXa-282-96.png');
       background-size: auto 36px;
       background-repeat: no-repeat;
     }
   }
-  .common-nav {
+  .common-header-nav {
     width: 500px;
     height: 60px;
     box-sizing: border-box;
@@ -44,7 +44,7 @@
     float: right;
     margin-right: 126px;
   }
-  .common-nav-item {
+  .common-header-nav-item {
     color: white;
     display: block;
     width: 130px;
@@ -57,7 +57,7 @@
     text-align: center;
     transition: background .3s, color .3s;
   }
-  .common-nav-item:hover {
+  .common-header-nav-item:hover {
     color: #00c49f;
     background: white;
   }
