@@ -10,21 +10,19 @@ class App extends React.Component {
     return (
       <div>
         <div className="left-panel">
-          <div className="nav-children">
+          <div className="api-nav">
             {
               Object.keys(components).map((folderKey) => {
                 const itemsInFolder = components[folderKey];
                 return (
-                  <div key={`folder-${folderKey}`}>
-                    <h3>{folderKey}</h3>
-                    <ul className="nav-list">
+                  <div className="api-nav-folder" key={`folder-${folderKey}`}>
+                    <h3 className="api-nav-title">{folderKey}</h3>
+                    <ul className="api-nav-list">
                       {
                         Object.keys(itemsInFolder).map((key) => {
                           return (
-                            <li key={`component-${folderKey}-${key}`}>
-                              <Link className="nav-link" to={`/${folderKey.toLowerCase()}/${key.toLowerCase()}`}>
-                                <span className="nav-link-zh">{key}</span>
-                              </Link>
+                            <li className="api-nav-item" key={`component-${folderKey}-${key}`}>
+                              <Link className="api-nav-link" to={`/${folderKey.toLowerCase()}/${key.toLowerCase()}`}>{key}</Link>
                             </li>
                           );
                         })
